@@ -4,14 +4,75 @@ DB_Info=('MySQL 5.1.73' 'MySQL 5.5.62' 'MySQL 5.6.51' 'MySQL 5.7.44' 'MySQL 8.0.
 PHP_Info=('PHP 5.2.17' 'PHP 5.3.29' 'PHP 5.4.45' 'PHP 5.5.38' 'PHP 5.6.40' 'PHP 7.0.33' 'PHP 7.1.33' 'PHP 7.2.34' 'PHP 7.3.33' 'PHP 7.4.33' 'PHP 8.0.30' 'PHP 8.1.28' 'PHP 8.2.19' 'PHP 8.3.7' 'PHP 8.4.18')
 Apache_Info=('Apache 2.2.34' 'Apache 2.4.57')
 
+# ── 智能推荐：根据硬件自动计算最优安装方案 ──
+# 设计原则：
+#   1. 数据库统一 MySQL 5.7 — 1G能跑，迁移无痛，避免跨版本坑
+#   2. PHP 统一 8.2 — 当前最佳平衡
+#   3. 编译方式统一预编译 — 省时省内存
+#   4. 内存分配器按内存分级 — 唯一需要区分的
+#   5. 安装后根据内存自动优化 my.cnf
+Smart_Recommend()
+{
+    REC_MEM=$(awk '/MemTotal/ {printf("%d", $2 / 1024)}' /proc/meminfo)
+    REC_CPU=$(grep -c '^processor' /proc/cpuinfo 2>/dev/null || echo 1)
+    REC_DISK=$(df -BG / | awk 'NR==2 {gsub("G",""); print $4}')
+
+    # 统一推荐
+    REC_DB=4        # MySQL 5.7 — 全配置通用
+    REC_PHP=13      # PHP 8.2
+    REC_BIN="y"     # 预编译二进制
+
+    # 内存分配器按内存分级
+    if [ ${REC_MEM} -le 2048 ]; then
+        REC_MALLOC=1; REC_MALLOC_NAME="不安装（节省资源）"
+    else
+        REC_MALLOC=2; REC_MALLOC_NAME="Jemalloc（优化内存管理）"
+    fi
+
+    # my.cnf 优化参数（安装后自动写入）
+    if [ ${REC_MEM} -le 768 ]; then
+        REC_INNODB_POOL="64M"; REC_PFS="OFF"; REC_MAXCONN=30
+        REC_MEM_LEVEL="极小内存模式"
+    elif [ ${REC_MEM} -le 1536 ]; then
+        REC_INNODB_POOL="128M"; REC_PFS="OFF"; REC_MAXCONN=50
+        REC_MEM_LEVEL="小内存优化模式"
+    elif [ ${REC_MEM} -le 3072 ]; then
+        REC_INNODB_POOL="256M"; REC_PFS="ON"; REC_MAXCONN=100
+        REC_MEM_LEVEL="标准模式"
+    else
+        local pool_mb=$((REC_MEM / 4))
+        REC_INNODB_POOL="${pool_mb}M"; REC_PFS="ON"; REC_MAXCONN=200
+        REC_MEM_LEVEL="高性能模式"
+    fi
+
+    echo ""
+    Echo_Yellow "╭─────────── 硬件检测 & 智能推荐 ───────────╮"
+    echo "│"
+    echo "│  🖥  CPU：${REC_CPU} 核 · 内存：${REC_MEM} MB · 磁盘可用：${REC_DISK} GB"
+    echo "│"
+    echo "│  📋 推荐方案（${REC_MEM_LEVEL}）："
+    echo "│     数据库 → MySQL 5.7（全配置通用，迁移无痛）"
+    echo "│     PHP    → PHP 8.2（兼容性最好）"
+    echo "│     编译   → 预编译二进制包（免编译，省时间）"
+    echo "│     分配器 → ${REC_MALLOC_NAME}"
+    echo "│"
+    echo "│  ⚙  安装后自动优化数据库配置："
+    echo "│     innodb_buffer_pool = ${REC_INNODB_POOL}"
+    echo "│     max_connections = ${REC_MAXCONN}"
+    echo "│"
+    Echo_Yellow "│  💡 全部回车即可使用推荐配置一键安装"
+    Echo_Yellow "╰───────────────────────────────────────────╯"
+    echo ""
+}
+
 Database_Selection()
 {
 #which MySQL Version do you want to install?
     if [ -z ${DBSelect} ]; then
-        DBSelect="2"
+        DBSelect="4"
         Echo_Yellow "请选择数据库版本（共 11 个选项）："
         echo "1: 安装 ${DB_Info[0]}"
-        echo "2: 安装 ${DB_Info[1]} (Default)"
+        echo "2: 安装 ${DB_Info[1]}"
         echo "3: 安装 ${DB_Info[2]}"
         echo "4: 安装 ${DB_Info[3]}"
         echo "5: 安装 ${DB_Info[4]}"
@@ -22,7 +83,7 @@ Database_Selection()
         echo "10: 安装 ${DB_Info[9]}"
         echo "11: 安装 ${DB_Info[10]}"
         echo "0: 不安装数据库"
-        read -p "请输入选项（1-11 或 0）： " DBSelect
+        read -p "请输入选项（回车默认 4=MySQL 5.7 推荐）： " DBSelect
     fi
 
     case "${DBSelect}" in
@@ -32,7 +93,7 @@ Database_Selection()
     2)
         if [[ "${DB_ARCH}" = "x86_64" || "${DB_ARCH}" = "i686" ]]; then
             if [ -z ${Bin} ]; then
-                read -p "使用预编译二进制包安装（更快）[y/n]： " Bin
+                read -p "使用预编译二进制包？（推荐，回车默认 Y）[Y/n]： " Bin
             fi
             case "${Bin}" in
             [yY][eE][sS]|[yY])
@@ -55,7 +116,7 @@ Database_Selection()
     3)
         if [[ "${DB_ARCH}" = "x86_64" || "${DB_ARCH}" = "i686" ]]; then
             if [ -z ${Bin} ]; then
-                read -p "使用预编译二进制包安装（更快）[y/n]： " Bin
+                read -p "使用预编译二进制包？（推荐，回车默认 Y）[Y/n]： " Bin
             fi
             case "${Bin}" in
             [yY][eE][sS]|[yY])
@@ -83,7 +144,7 @@ Database_Selection()
     4)
         if [[ "${DB_ARCH}" = "x86_64" || "${DB_ARCH}" = "i686" ]]; then
             if [ -z ${Bin} ]; then
-                read -p "使用预编译二进制包安装（更快）[y/n]： " Bin
+                read -p "使用预编译二进制包？（推荐，回车默认 Y）[Y/n]： " Bin
             fi
             case "${Bin}" in
             [yY][eE][sS]|[yY])
@@ -111,7 +172,7 @@ Database_Selection()
     5)
         if [[ "${DB_ARCH}" = "x86_64" || "${DB_ARCH}" = "i686" || "${DB_ARCH}" = "aarch64" ]]; then
             if [ -z ${Bin} ]; then
-                read -p "使用预编译二进制包安装（更快）[y/n]： " Bin
+                read -p "使用预编译二进制包？（推荐，回车默认 Y）[Y/n]： " Bin
             fi
             case "${Bin}" in
             [yY][eE][sS]|[yY])
@@ -140,7 +201,7 @@ Database_Selection()
         echo "即将安装 ${DB_Info[5]}"
         if [[ "${DB_ARCH}" = "x86_64" || "${DB_ARCH}" = "i686" ]]; then
             if [ -z ${Bin} ]; then
-                read -p "使用预编译二进制包安装（更快）[y/n]： " Bin
+                read -p "使用预编译二进制包？（推荐，回车默认 Y）[Y/n]： " Bin
             fi
             case "${Bin}" in
             [yY][eE][sS]|[yY])
@@ -169,7 +230,7 @@ Database_Selection()
         echo "即将安装 ${DB_Info[6]}"
         if [[ "${DB_ARCH}" = "x86_64" || "${DB_ARCH}" = "i686" ]]; then
             if [ -z ${Bin} ]; then
-                read -p "使用预编译二进制包安装（更快）[y/n]： " Bin
+                read -p "使用预编译二进制包？（推荐，回车默认 Y）[Y/n]： " Bin
             fi
             case "${Bin}" in
             [yY][eE][sS]|[yY])
@@ -198,7 +259,7 @@ Database_Selection()
         echo "即将安装 ${DB_Info[7]}"
         if [[ "${DB_ARCH}" = "x86_64" || "${DB_ARCH}" = "i686" ]]; then
             if [ -z ${Bin} ]; then
-                read -p "使用预编译二进制包安装（更快）[y/n]： " Bin
+                read -p "使用预编译二进制包？（推荐，回车默认 Y）[Y/n]： " Bin
             fi
             case "${Bin}" in
             [yY][eE][sS]|[yY])
@@ -227,7 +288,7 @@ Database_Selection()
         echo "即将安装 ${DB_Info[8]}"
         if [[ "${DB_ARCH}" = "x86_64" ]]; then
             if [ -z ${Bin} ]; then
-                read -p "使用预编译二进制包安装（更快）[y/n]： " Bin
+                read -p "使用预编译二进制包？（推荐，回车默认 Y）[Y/n]： " Bin
             fi
             case "${Bin}" in
             [yY][eE][sS]|[yY])
@@ -256,7 +317,7 @@ Database_Selection()
         echo "即将安装 ${DB_Info[9]}"
         if [[ "${DB_ARCH}" = "x86_64" ]]; then
             if [ -z ${Bin} ]; then
-                read -p "使用预编译二进制包安装（更快）[y/n]： " Bin
+                read -p "使用预编译二进制包？（推荐，回车默认 Y）[Y/n]： " Bin
             fi
             case "${Bin}" in
             [yY][eE][sS]|[yY])
@@ -285,7 +346,7 @@ Database_Selection()
         echo "即将安装 ${DB_Info[10]}"
         if [[ "${DB_ARCH}" = "x86_64" || "${DB_ARCH}" = "i686" || "${DB_ARCH}" = "aarch64" ]]; then
             if [ -z ${Bin} ]; then
-                read -p "使用预编译二进制包安装（更快）[y/n]： " Bin
+                read -p "使用预编译二进制包？（推荐，回车默认 Y）[Y/n]： " Bin
             fi
             case "${Bin}" in
             [yY][eE][sS]|[yY])
@@ -314,8 +375,8 @@ Database_Selection()
         echo "不安装数据库"
         ;;
     *)
-        echo "未输入，默认安装 ${DB_Info[1]}"
-        DBSelect="2"
+        echo "未输入，使用推荐配置 MySQL 5.7"
+        DBSelect="4"
     esac
 
     if [ "${Bin}" != "y" ] && [[ "${DBSelect}" =~ ^5|[7-9]|1[0-1]$ ]] && [ $(awk '/MemTotal/ {printf( "%d\n", $2 / 1024 )}' /proc/meminfo) -le 1024 ]; then
@@ -357,7 +418,7 @@ Database_Selection()
         if [ -z ${InstallInnodb} ]; then
             InstallInnodb="y"
             Echo_Yellow "是否启用 InnoDB 存储引擎？"
-            read -p "默认启用，请选择 [Y/n]： " InstallInnodb
+            read -p "推荐启用（回车默认 Y）[Y/n]： " InstallInnodb
         fi
 
         case "${InstallInnodb}" in
@@ -382,13 +443,13 @@ PHP_Selection()
     if [ -z ${PHPSelect} ]; then
         echo "==========================="
 
-        PHPSelect="3"
+        PHPSelect="13"
         Echo_Yellow "请选择 PHP 版本："
         echo "1: 安装 ${PHP_Info[0]}"
         echo "2: 安装 ${PHP_Info[1]}"
         echo "3: 安装 ${PHP_Info[2]}"
         echo "4: 安装 ${PHP_Info[3]}"
-        echo "5: 安装 ${PHP_Info[4]} (Default)"
+        echo "5: 安装 ${PHP_Info[4]}"
         echo "6: 安装 ${PHP_Info[5]}"
         echo "7: 安装 ${PHP_Info[6]}"
         echo "8: 安装 ${PHP_Info[7]}"
@@ -398,7 +459,7 @@ PHP_Selection()
         echo "12: 安装 ${PHP_Info[11]}"
         echo "13: 安装 ${PHP_Info[12]}"
         echo "14: 安装 ${PHP_Info[13]}"
-        read -p "请输入选项（1-14）： " PHPSelect
+        read -p "请输入选项（回车默认 13=PHP 8.2 推荐）： " PHPSelect
     fi
 
     case "${PHPSelect}" in
@@ -449,8 +510,8 @@ PHP_Selection()
         echo "即将安装 ${PHP_Info[13]}"
         ;;
     *)
-        echo "未输入，默认安装 ${PHP_Info[4]}"
-        PHPSelect="5"
+        echo "未输入，使用推荐配置 PHP 8.2"
+        PHPSelect="13"
     esac
 }
 
@@ -460,12 +521,12 @@ MemoryAllocator_Selection()
     if [ -z ${SelectMalloc} ]; then
         echo "==========================="
 
-        SelectMalloc="1"
+        SelectMalloc="${REC_MALLOC}"
         Echo_Yellow "请选择内存分配器："
         echo "1: 不安装（默认）"
         echo "2: 安装 Jemalloc"
         echo "3: 安装 TCMalloc"
-        read -p "请输入选项（1-3）： " SelectMalloc
+        read -p "请输入选项（回车使用推荐 ${REC_MALLOC}）： " SelectMalloc
     fi
 
     case "${SelectMalloc}" in
@@ -502,6 +563,7 @@ malloc-lib=/usr/lib/libtcmalloc.so'
 
 Dispaly_Selection()
 {
+    Smart_Recommend
     Database_Selection
     PHP_Selection
     MemoryAllocator_Selection
@@ -530,7 +592,7 @@ Apache_Selection()
         ApacheSelect="1"
         Echo_Yellow "请选择 Apache 版本："
         echo "1: 安装 ${Apache_Info[0]}"
-        echo "2: 安装 ${Apache_Info[1]} (Default)"
+        echo "2: 安装 ${Apache_Info[1]}"
         read -p "请输入选项（1 或 2）： " ApacheSelect
     fi
 
@@ -879,6 +941,76 @@ Print_APP_Ver()
         echo "不安装数据库"
     fi
     echo "网站根目录：${Default_Website_Dir}"
+}
+
+# ── 安装后根据内存自动优化 my.cnf ──
+Optimize_MyCnf()
+{
+    local MEM_MB=$(awk '/MemTotal/ {printf("%d", $2 / 1024)}' /proc/meminfo)
+    local MYCNF="/etc/my.cnf"
+
+    if [ ! -f "${MYCNF}" ]; then
+        echo "my.cnf 不存在，跳过优化"
+        return
+    fi
+
+    echo ""
+    Echo_Yellow "正在根据内存（${MEM_MB}MB）优化数据库配置..."
+
+    # 备份原始配置
+    cp ${MYCNF} ${MYCNF}.bak.$(date +%Y%m%d%H%M%S)
+
+    # 根据内存计算参数
+    local POOL_SIZE="128M"
+    local PFS="OFF"
+    local MAX_CONN=50
+    local KEY_BUF="8M"
+    local TABLE_CACHE=256
+    local SORT_BUF="256K"
+    local READ_BUF="256K"
+
+    if [ ${MEM_MB} -le 768 ]; then
+        POOL_SIZE="64M"; PFS="OFF"; MAX_CONN=30
+        KEY_BUF="4M"; TABLE_CACHE=128; SORT_BUF="128K"; READ_BUF="128K"
+    elif [ ${MEM_MB} -le 1536 ]; then
+        POOL_SIZE="128M"; PFS="OFF"; MAX_CONN=50
+        KEY_BUF="8M"; TABLE_CACHE=256; SORT_BUF="256K"; READ_BUF="256K"
+    elif [ ${MEM_MB} -le 3072 ]; then
+        POOL_SIZE="256M"; PFS="ON"; MAX_CONN=100
+        KEY_BUF="16M"; TABLE_CACHE=512; SORT_BUF="512K"; READ_BUF="512K"
+    else
+        local pool_mb=$((MEM_MB / 4))
+        POOL_SIZE="${pool_mb}M"; PFS="ON"; MAX_CONN=200
+        KEY_BUF="32M"; TABLE_CACHE=1024; SORT_BUF="1M"; READ_BUF="1M"
+    fi
+
+    # 追加优化参数（如果还没有添加过）
+    if ! grep -q "# nextLNMP auto optimize" ${MYCNF}; then
+        cat >> ${MYCNF} << OPTEOF
+
+# nextLNMP auto optimize (${MEM_MB}MB memory)
+[mysqld]
+innodb_buffer_pool_size = ${POOL_SIZE}
+max_connections = ${MAX_CONN}
+performance_schema = ${PFS}
+key_buffer_size = ${KEY_BUF}
+table_open_cache = ${TABLE_CACHE}
+sort_buffer_size = ${SORT_BUF}
+read_buffer_size = ${READ_BUF}
+read_rnd_buffer_size = ${READ_BUF}
+thread_cache_size = 8
+innodb_log_buffer_size = 4M
+innodb_flush_log_at_trx_commit = 2
+innodb_file_per_table = 1
+skip-name-resolve
+OPTEOF
+        echo "  ✓ 数据库配置已优化"
+        echo "    innodb_buffer_pool_size = ${POOL_SIZE}"
+        echo "    max_connections = ${MAX_CONN}"
+        echo "    performance_schema = ${PFS}"
+    else
+        echo "  已优化过，跳过"
+    fi
 }
 
 Print_Sys_Info()

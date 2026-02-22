@@ -670,6 +670,7 @@ EOF
     ln -sf /usr/local/mysql/include/mysql /usr/include/mysql
 
     MySQL_Sec_Setting
+    Optimize_MyCnf
 }
 
 Install_MySQL_80()
@@ -776,6 +777,7 @@ EOF
     ln -sf /usr/local/mysql/include/mysql /usr/include/mysql
 
     MySQL_Sec_Setting
+    Optimize_MyCnf
 }
 
 Install_MySQL_84()
