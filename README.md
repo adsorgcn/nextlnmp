@@ -2,7 +2,7 @@
 
 <div align="center">
 
-![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)
+![Version](https://img.shields.io/badge/version-1.1.0-blue.svg)
 ![License](https://img.shields.io/badge/license-GPL--3.0-green.svg)
 ![System](https://img.shields.io/badge/system-CentOS%20|%20Ubuntu%20|%20Debian-orange.svg)
 ![PHP](https://img.shields.io/badge/PHP-5.6~8.4-purple.svg)
@@ -38,12 +38,27 @@ nextLNMP 就是为了解决这个问题而生的：
 
 ## ⚡ 快速开始
 
+**方式一：一行命令安装（推荐）**
+
+自动检测网络，三源容灾，哪个快用哪个：
+
 ```bash
-wget https://github.com/adsorgcn/nextlnmp/releases/download/v1.0.0/nextlnmp-1.0.0.tar.gz
-tar zxf nextlnmp-1.0.0.tar.gz
-cd nextlnmp-1.0.0
-bash install.sh
+bash <(curl -sL https://gitee.com/palmmedia/nextlnmp/raw/main/install.sh)
 ```
+
+**方式二：从 Gitee 下载安装（国内快）**
+
+```bash
+wget https://gitee.com/palmmedia/nextlnmp/releases/download/v1.1.0/nextlnmp-1.1.0.tar.gz && tar zxf nextlnmp-1.1.0.tar.gz && cd nextlnmp-1.1.0 && bash install.sh
+```
+
+**方式三：从 GitHub 下载安装**
+
+```bash
+wget https://github.com/adsorgcn/nextlnmp/releases/download/v1.1.0/nextlnmp-1.1.0.tar.gz && tar zxf nextlnmp-1.1.0.tar.gz && cd nextlnmp-1.1.0 && bash install.sh
+```
+
+三种方式装出来的东西完全一样，选哪个都行。
 
 根据菜单提示选择 PHP、MySQL 版本，剩下的交给脚本。全程无需手动干预，编译安装完成后自动启动服务。
 
@@ -161,7 +176,7 @@ nextLNMP 的安全不是一句口号，是工程化落地的完整方案：
 ## 📂 目录结构
 
 ```
-nextlnmp-1.0.0/
+nextlnmp-1.1.0/
 ├── install.sh          # 安装入口
 ├── nextlnmp.conf       # 配置文件（镜像源地址等）
 ├── upgrade.sh          # 升级脚本
@@ -243,6 +258,16 @@ nextLNMP 采用 GPL-3.0 + 商业双授权模式：
 </details>
 
 ## 🔄 更新日志
+
+### v1.1.0 (2026-02-22)
+- 🚀 新增一行 `curl` 安装命令，复制粘贴即装
+- 🔄 三源容灾下载（镜像站 → Gitee → GitHub），自动切换最快源
+- 🔒 安装包 SHA256 完整性校验，防篡改
+- 🖥️ 系统环境预检（内存 / 磁盘 / 端口），只警告不阻断
+- 🛡️ root 权限检查，无权限大白话引导提权
+- 📦 包管理器自动识别（yum / apt-get），基础依赖自动安装
+- 🔄 旧版本自动备份，升级无忧
+- 🇨🇳 全中文错误提示，出错告诉你怎么解决
 
 ### v1.0.0 (2026-02-22)
 - 🎉 首次发布
