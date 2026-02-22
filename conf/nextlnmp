@@ -1611,5 +1611,24 @@ case "${arg1}" in
         echo "Usage: lnmp {dnsssl|dns} {cx|ali|cf|dp|he|gd|aws}"
         echo "Usage: lnmp onlyssl {cx|ali|cf|dp|he|gd|aws}"
         ;;
+    password)
+        if [ "$2" = "--delete" ]; then
+            if [ -f /root/.nextlnmp_db_password ]; then
+                rm -f /root/.nextlnmp_db_password
+                echo "✓ 密码文件已删除"
+            else
+                echo "密码文件不存在"
+            fi
+        else
+            if [ -f /root/.nextlnmp_db_password ]; then
+                echo "数据库 root 密码：$(cat /root/.nextlnmp_db_password)"
+                echo ""
+                echo "记住后执行 nextlnmp password --delete 删除密码文件"
+            else
+                echo "密码文件不存在（已删除或未生成）"
+                echo "如需重置密码：bash tools/reset_mysql_root_password.sh"
+            fi
+        fi
+        ;;
 esac
 exit

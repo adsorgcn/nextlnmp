@@ -337,13 +337,17 @@ Database_Selection()
         #set mysql root password
         if [ -z ${DB_Root_Password} ]; then
             echo "==========================="
-            DB_Root_Password="root"
-            Echo_Yellow "请设置数据库 root 密码"
-            read -p "请输入密码： " DB_Root_Password
-            if [ "${DB_Root_Password}" = "" ]; then
-                echo "未输入密码，将自动生成随机密码"
-                DB_Root_Password="nextlnmp.com#$RANDOM"
-            fi
+            DB_Root_Password=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | head -c 16)
+            Echo_Yellow "数据库 root 密码已自动生成："
+            echo ""
+            echo "  密码：${DB_Root_Password}"
+            echo ""
+            echo "${DB_Root_Password}" > /root/.nextlnmp_db_password
+            chmod 600 /root/.nextlnmp_db_password
+            echo "  密码已保存到：/root/.nextlnmp_db_password"
+            echo "  查看密码：nextlnmp password"
+            echo "  记住后删除：nextlnmp password --delete"
+            echo ""
         fi
         echo "数据库 root 密码：${DB_Root_Password}"
 
