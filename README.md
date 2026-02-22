@@ -2,7 +2,7 @@
 
 <div align="center">
 
-![Version](https://img.shields.io/badge/version-1.1.1-blue.svg)
+![Version](https://img.shields.io/badge/version-1.3.3-blue.svg)
 ![License](https://img.shields.io/badge/license-GPL--3.0-green.svg)
 ![System](https://img.shields.io/badge/system-CentOS%20|%20Ubuntu%20|%20Debian-orange.svg)
 ![PHP](https://img.shields.io/badge/PHP-5.6~8.4-purple.svg)
@@ -49,13 +49,13 @@ bash <(curl -sL https://gitee.com/palmmedia/nextlnmp/raw/main/install.sh)
 **方式二：从 Gitee 下载安装（国内快）**
 
 ```bash
-wget https://gitee.com/palmmedia/nextlnmp/releases/download/v1.1.1/nextlnmp-1.1.1.tar.gz && tar zxf nextlnmp-1.1.1.tar.gz && cd nextlnmp-1.1.1 && bash install.sh
+wget https://gitee.com/palmmedia/nextlnmp/releases/download/v1.3.3/nextlnmp-1.3.3.tar.gz && tar zxf nextlnmp-1.3.3.tar.gz && cd nextlnmp-1.3.3 && bash install.sh
 ```
 
 **方式三：从 GitHub 下载安装**
 
 ```bash
-wget https://github.com/adsorgcn/nextlnmp/releases/download/v1.1.1/nextlnmp-1.1.1.tar.gz && tar zxf nextlnmp-1.1.1.tar.gz && cd nextlnmp-1.1.1 && bash install.sh
+wget https://github.com/adsorgcn/nextlnmp/releases/download/v1.3.3/nextlnmp-1.3.3.tar.gz && tar zxf nextlnmp-1.3.3.tar.gz && cd nextlnmp-1.3.3 && bash install.sh
 ```
 
 三种方式装出来的东西完全一样，选哪个都行。
@@ -176,7 +176,7 @@ nextLNMP 的安全不是一句口号，是工程化落地的完整方案：
 ## 📂 目录结构
 
 ```
-nextlnmp-1.1.1/
+nextlnmp-1.3.3/
 ├── install.sh          # 安装入口
 ├── nextlnmp.conf       # 配置文件（镜像源地址等）
 ├── upgrade.sh          # 升级脚本
@@ -258,6 +258,29 @@ nextLNMP 采用 GPL-3.0 + 商业双授权模式：
 </details>
 
 ## 🔄 更新日志
+
+### v1.3.3 (2026-02-23)
+- 🎨 安装完成界面全面中文化重写，品牌信息统一
+- 🧹 清理所有残留的原项目标识
+
+### v1.3.2 (2026-02-23)
+- 🐛 修复一路回车安装走源码编译的问题（DBSelect 回退时未同步设置 Bin=y）
+- 🚀 数据库 Binary 包下载改为镜像站优先，官方源回退
+- 📦 镜像站新增全套数据库 Binary 包（MySQL 5个 + MariaDB 4个，共 5GB+）
+
+### v1.3.1 (2026-02-23)
+- 🐛 修复预编译二进制包选项默认值（回车空输入走了源码编译）
+
+### v1.3.0 (2026-02-22)
+- 🧠 新增智能硬件推荐系统：自动检测 CPU/内存/磁盘，一键推荐最佳配置
+- 📊 新增 MySQL my.cnf 自动优化：根据内存分级调整 buffer_pool/max_conn/performance_schema
+- 🎯 统一推荐 MySQL 5.7（所有配置），避免用户迁移时跨版本数据库导入出错
+- ⏎ 所有菜单提示加"回车默认"，小白一路回车即可完成安装
+
+### v1.2.0 (2026-02-22)
+- 🇨🇳 全面中文化：数据库选择、PHP 选择、内存分配器选择菜单全部中文
+- 🔑 数据库密码自动生成（16位随机密码），不再让小白手动设密码
+- 🔍 品牌 PHP 探针（nextLNMP Prober），替换默认探针
 
 ### v1.1.1 (2026-02-22)
 - ⚙️ 新增 GitHub Actions 自动化发版，推 tag 即出 Release，无需手动打包
