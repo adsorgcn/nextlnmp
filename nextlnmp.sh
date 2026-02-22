@@ -3,7 +3,7 @@ export PATH=$PATH:/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:~
 
 # Check if user is root
 if [ $(id -u) != "0" ]; then
-    echo "Error: You must be root to run this script, please use root to install nextlnmp"
+    echo "❌ 请使用 root 用户运行此脚本"
     exit 1
 fi
 
@@ -38,7 +38,7 @@ fi
 
 if [[ "${Stack}" = "nextlnmp" || "${Stack}" = "nextlnmpa" || "${Stack}" = "lamp" ]]; then
     if [ -f /bin/nextlnmp ]; then
-        Echo_Red "You have installed nextLNMP!"
+        Echo_Red "nextLNMP 已安装过，请先卸载旧版本"
         echo -e "If you want to reinstall nextLNMP, please BACKUP your data.\nand run uninstall script: ./uninstall.sh before you install."
         exit 1
     fi
@@ -48,11 +48,11 @@ Check_nextLNMPConf
 
 clear
 echo "+------------------------------------------------------------------------+"
-echo "|          nextLNMP V${NEXTLNMP_Ver} for ${DISTRO} Linux Server, by nextLNMP team     |"
+echo "|          nextLNMP v1.2.0 一键建站安装程序                    |"
 echo "+------------------------------------------------------------------------+"
-echo "|        A tool to auto-compile & install nextLNMP/nextLNMPA/NextLAMP on Linux       |"
+echo "|        安全可信 · SHA256 逐包校验 · 掌媒科技出品              |"
 echo "+------------------------------------------------------------------------+"
-echo "|           For more information please visit https://nextlnmp.com           |"
+echo "|           官网：nextlnmp.com · QQ群：615298                    |"
 echo "+------------------------------------------------------------------------+"
 
 Init_Install()

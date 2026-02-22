@@ -360,7 +360,7 @@ CentOS_Dependent()
     if echo "${CentOS_Version}" | grep -Eqi "^8" || echo "${RHEL_Version}" | grep -Eqi "^8" || echo "${Rocky_Version}" | grep -Eqi "^8" || echo "${Alma_Version}" | grep -Eqi "^8" || echo "${Anolis_Version}" | grep -Eqi "^8" || echo "${OpenCloudOS_Version}" | grep -Eqi "^8"; then
         Check_PowerTools
         if [ "${repo_id}" != "" ]; then
-            echo "Installing packages in PowerTools repository..."
+            echo "正在安装 packages in PowerTools repository..."
             for c8packages in rpcgen re2c oniguruma-devel;
             do dnf --enablerepo=${repo_id} install ${c8packages} -y; done
         fi
@@ -434,7 +434,7 @@ EOF
     if [ "${DISTRO}" = "UOS" ]; then
         Check_PowerTools
         if [ "${repo_id}" != "" ]; then
-            echo "Installing packages in PowerTools repository..."
+            echo "正在安装 packages in PowerTools repository..."
             for uospackages in rpcgen re2c oniguruma-devel;
             do dnf --enablerepo=${repo_id} install ${uospackages} -y; done
         fi

@@ -9,38 +9,38 @@ Database_Selection()
 #which MySQL Version do you want to install?
     if [ -z ${DBSelect} ]; then
         DBSelect="2"
-        Echo_Yellow "You have 11 options for your DataBase install."
-        echo "1: Install ${DB_Info[0]}"
-        echo "2: Install ${DB_Info[1]} (Default)"
-        echo "3: Install ${DB_Info[2]}"
-        echo "4: Install ${DB_Info[3]}"
-        echo "5: Install ${DB_Info[4]}"
-        echo "6: Install ${DB_Info[5]}"
-        echo "7: Install ${DB_Info[6]}"
-        echo "8: Install ${DB_Info[7]}"
-        echo "9: Install ${DB_Info[8]}"
-        echo "10: Install ${DB_Info[9]}"
-        echo "11: Install ${DB_Info[10]}"
-        echo "0: DO NOT Install MySQL/MariaDB"
-        read -p "Enter your choice (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 or 0): " DBSelect
+        Echo_Yellow "请选择数据库版本（共 11 个选项）："
+        echo "1: 安装 ${DB_Info[0]}"
+        echo "2: 安装 ${DB_Info[1]} (Default)"
+        echo "3: 安装 ${DB_Info[2]}"
+        echo "4: 安装 ${DB_Info[3]}"
+        echo "5: 安装 ${DB_Info[4]}"
+        echo "6: 安装 ${DB_Info[5]}"
+        echo "7: 安装 ${DB_Info[6]}"
+        echo "8: 安装 ${DB_Info[7]}"
+        echo "9: 安装 ${DB_Info[8]}"
+        echo "10: 安装 ${DB_Info[9]}"
+        echo "11: 安装 ${DB_Info[10]}"
+        echo "0: 不安装数据库"
+        read -p "请输入选项（1-11 或 0）： " DBSelect
     fi
 
     case "${DBSelect}" in
     1)
-        echo "You will install ${DB_Info[0]}"
+        echo "即将安装 ${DB_Info[0]}"
         ;;
     2)
         if [[ "${DB_ARCH}" = "x86_64" || "${DB_ARCH}" = "i686" ]]; then
             if [ -z ${Bin} ]; then
-                read -p "Using Generic Binaries [y/n]: " Bin
+                read -p "使用预编译二进制包安装（更快）[y/n]： " Bin
             fi
             case "${Bin}" in
             [yY][eE][sS]|[yY])
-                echo "You will install ${DB_Info[1]} Using Generic Binaries."
+                echo "即将安装 ${DB_Info[1]} （预编译二进制包）"
                 Bin="y"
                 ;;
             [nN][oO]|[nN])
-                echo "You will install ${DB_Info[1]} from Source."
+                echo "即将安装 ${DB_Info[1]} （源码编译）"
                 Bin="n"
                 ;;
             *)
@@ -48,30 +48,30 @@ Database_Selection()
                 ;;
             esac
         else
-            echo "Default install ${DB_Info[1]} from Source."
+            echo "默认安装 ${DB_Info[1]} （源码编译）"
             Bin="n"
         fi
         ;;
     3)
         if [[ "${DB_ARCH}" = "x86_64" || "${DB_ARCH}" = "i686" ]]; then
             if [ -z ${Bin} ]; then
-                read -p "Using Generic Binaries [y/n]: " Bin
+                read -p "使用预编译二进制包安装（更快）[y/n]： " Bin
             fi
             case "${Bin}" in
             [yY][eE][sS]|[yY])
-                echo "You will install ${DB_Info[2]} Using Generic Binaries."
+                echo "即将安装 ${DB_Info[2]} （预编译二进制包）"
                 Bin="y"
                 ;;
             [nN][oO]|[nN])
-                echo "You will install ${DB_Info[2]} from Source."
+                echo "即将安装 ${DB_Info[2]} （源码编译）"
                 Bin="n"
                 ;;
             *)
                 if [ "${CheckMirror}" != "n" ]; then
-                    echo "Default install ${DB_Info[2]} Using Generic Binaries."
+                    echo "默认安装 ${DB_Info[2]} （预编译二进制包）"
                     Bin="y"
                 else
-                    echo "Default install ${DB_Info[2]} from Source."
+                    echo "默认安装 ${DB_Info[2]} （源码编译）"
                     Bin="n"
                 fi
                 ;;
@@ -83,23 +83,23 @@ Database_Selection()
     4)
         if [[ "${DB_ARCH}" = "x86_64" || "${DB_ARCH}" = "i686" ]]; then
             if [ -z ${Bin} ]; then
-                read -p "Using Generic Binaries [y/n]: " Bin
+                read -p "使用预编译二进制包安装（更快）[y/n]： " Bin
             fi
             case "${Bin}" in
             [yY][eE][sS]|[yY])
-                echo "You will install ${DB_Info[3]} Using Generic Binaries."
+                echo "即将安装 ${DB_Info[3]} （预编译二进制包）"
                 Bin="y"
                 ;;
             [nN][oO]|[nN])
-                echo "You will install ${DB_Info[3]} from Source."
+                echo "即将安装 ${DB_Info[3]} （源码编译）"
                 Bin="n"
                 ;;
             *)
                 if [ "${CheckMirror}" != "n" ]; then
-                    echo "Default install ${DB_Info[3]} Using Generic Binaries."
+                    echo "默认安装 ${DB_Info[3]} （预编译二进制包）"
                     Bin="y"
                 else
-                    echo "Default install ${DB_Info[3]} from Source."
+                    echo "默认安装 ${DB_Info[3]} （源码编译）"
                     Bin="n"
                 fi
                 ;;
@@ -111,23 +111,23 @@ Database_Selection()
     5)
         if [[ "${DB_ARCH}" = "x86_64" || "${DB_ARCH}" = "i686" || "${DB_ARCH}" = "aarch64" ]]; then
             if [ -z ${Bin} ]; then
-                read -p "Using Generic Binaries [y/n]: " Bin
+                read -p "使用预编译二进制包安装（更快）[y/n]： " Bin
             fi
             case "${Bin}" in
             [yY][eE][sS]|[yY])
-                echo "You will install ${DB_Info[4]} Using Generic Binaries."
+                echo "即将安装 ${DB_Info[4]} （预编译二进制包）"
                 Bin="y"
                 ;;
             [nN][oO]|[nN])
-                echo "You will install ${DB_Info[4]} from Source."
+                echo "即将安装 ${DB_Info[4]} （源码编译）"
                 Bin="n"
                 ;;
             *)
                 if [ "${CheckMirror}" != "n" ]; then
-                    echo "Default install ${DB_Info[4]} Using Generic Binaries."
+                    echo "默认安装 ${DB_Info[4]} （预编译二进制包）"
                     Bin="y"
                 else
-                    echo "Default install ${DB_Info[4]} from Source."
+                    echo "默认安装 ${DB_Info[4]} （源码编译）"
                     Bin="n"
                 fi
                 ;;
@@ -137,26 +137,26 @@ Database_Selection()
         fi
         ;;
     6)
-        echo "You will install ${DB_Info[5]}"
+        echo "即将安装 ${DB_Info[5]}"
         if [[ "${DB_ARCH}" = "x86_64" || "${DB_ARCH}" = "i686" ]]; then
             if [ -z ${Bin} ]; then
-                read -p "Using Generic Binaries [y/n]: " Bin
+                read -p "使用预编译二进制包安装（更快）[y/n]： " Bin
             fi
             case "${Bin}" in
             [yY][eE][sS]|[yY])
-                echo "You will install ${DB_Info[5]} Using Generic Binaries."
+                echo "即将安装 ${DB_Info[5]} （预编译二进制包）"
                 Bin="y"
                 ;;
             [nN][oO]|[nN])
-                echo "You will install ${DB_Info[5]} from Source."
+                echo "即将安装 ${DB_Info[5]} （源码编译）"
                 Bin="n"
                 ;;
             *)
                 if [ "${CheckMirror}" != "n" ]; then
-                    echo "Default install ${DB_Info[5]} Using Generic Binaries."
+                    echo "默认安装 ${DB_Info[5]} （预编译二进制包）"
                     Bin="y"
                 else
-                    echo "Default install ${DB_Info[5]} from Source."
+                    echo "默认安装 ${DB_Info[5]} （源码编译）"
                     Bin="n"
                 fi
                 ;;
@@ -166,26 +166,26 @@ Database_Selection()
         fi
         ;;
     7)
-        echo "You will install ${DB_Info[6]}"
+        echo "即将安装 ${DB_Info[6]}"
         if [[ "${DB_ARCH}" = "x86_64" || "${DB_ARCH}" = "i686" ]]; then
             if [ -z ${Bin} ]; then
-                read -p "Using Generic Binaries [y/n]: " Bin
+                read -p "使用预编译二进制包安装（更快）[y/n]： " Bin
             fi
             case "${Bin}" in
             [yY][eE][sS]|[yY])
-                echo "You will install ${DB_Info[6]} Using Generic Binaries."
+                echo "即将安装 ${DB_Info[6]} （预编译二进制包）"
                 Bin="y"
                 ;;
             [nN][oO]|[nN])
-                echo "You will install ${DB_Info[6]} from Source."
+                echo "即将安装 ${DB_Info[6]} （源码编译）"
                 Bin="n"
                 ;;
             *)
                 if [ "${CheckMirror}" != "n" ]; then
-                    echo "Default install ${DB_Info[6]} Using Generic Binaries."
+                    echo "默认安装 ${DB_Info[6]} （预编译二进制包）"
                     Bin="y"
                 else
-                    echo "Default install ${DB_Info[6]} from Source."
+                    echo "默认安装 ${DB_Info[6]} （源码编译）"
                     Bin="n"
                 fi
                 ;;
@@ -195,26 +195,26 @@ Database_Selection()
         fi
         ;;
     8)
-        echo "You will install ${DB_Info[7]}"
+        echo "即将安装 ${DB_Info[7]}"
         if [[ "${DB_ARCH}" = "x86_64" || "${DB_ARCH}" = "i686" ]]; then
             if [ -z ${Bin} ]; then
-                read -p "Using Generic Binaries [y/n]: " Bin
+                read -p "使用预编译二进制包安装（更快）[y/n]： " Bin
             fi
             case "${Bin}" in
             [yY][eE][sS]|[yY])
-                echo "You will install ${DB_Info[7]} Using Generic Binaries."
+                echo "即将安装 ${DB_Info[7]} （预编译二进制包）"
                 Bin="y"
                 ;;
             [nN][oO]|[nN])
-                echo "You will install ${DB_Info[7]} from Source."
+                echo "即将安装 ${DB_Info[7]} （源码编译）"
                 Bin="n"
                 ;;
             *)
                 if [ "${CheckMirror}" != "n" ]; then
-                    echo "Default install ${DB_Info[7]} Using Generic Binaries."
+                    echo "默认安装 ${DB_Info[7]} （预编译二进制包）"
                     Bin="y"
                 else
-                    echo "Default install ${DB_Info[7]} from Source."
+                    echo "默认安装 ${DB_Info[7]} （源码编译）"
                     Bin="n"
                 fi
                 ;;
@@ -224,26 +224,26 @@ Database_Selection()
         fi
         ;;
     9)
-        echo "You will install ${DB_Info[8]}"
+        echo "即将安装 ${DB_Info[8]}"
         if [[ "${DB_ARCH}" = "x86_64" ]]; then
             if [ -z ${Bin} ]; then
-                read -p "Using Generic Binaries [y/n]: " Bin
+                read -p "使用预编译二进制包安装（更快）[y/n]： " Bin
             fi
             case "${Bin}" in
             [yY][eE][sS]|[yY])
-                echo "You will install ${DB_Info[8]} Using Generic Binaries."
+                echo "即将安装 ${DB_Info[8]} （预编译二进制包）"
                 Bin="y"
                 ;;
             [nN][oO]|[nN])
-                echo "You will install ${DB_Info[8]} from Source."
+                echo "即将安装 ${DB_Info[8]} （源码编译）"
                 Bin="n"
                 ;;
             *)
                 if [ "${CheckMirror}" != "n" ]; then
-                    echo "Default install ${DB_Info[8]} Using Generic Binaries."
+                    echo "默认安装 ${DB_Info[8]} （预编译二进制包）"
                     Bin="y"
                 else
-                    echo "Default install ${DB_Info[8]} from Source."
+                    echo "默认安装 ${DB_Info[8]} （源码编译）"
                     Bin="n"
                 fi
                 ;;
@@ -253,26 +253,26 @@ Database_Selection()
         fi
         ;;
     10)
-        echo "You will install ${DB_Info[9]}"
+        echo "即将安装 ${DB_Info[9]}"
         if [[ "${DB_ARCH}" = "x86_64" ]]; then
             if [ -z ${Bin} ]; then
-                read -p "Using Generic Binaries [y/n]: " Bin
+                read -p "使用预编译二进制包安装（更快）[y/n]： " Bin
             fi
             case "${Bin}" in
             [yY][eE][sS]|[yY])
-                echo "You will install ${DB_Info[9]} Using Generic Binaries."
+                echo "即将安装 ${DB_Info[9]} （预编译二进制包）"
                 Bin="y"
                 ;;
             [nN][oO]|[nN])
-                echo "You will install ${DB_Info[9]} from Source."
+                echo "即将安装 ${DB_Info[9]} （源码编译）"
                 Bin="n"
                 ;;
             *)
                 if [ "${CheckMirror}" != "n" ]; then
-                    echo "Default install ${DB_Info[9]} Using Generic Binaries."
+                    echo "默认安装 ${DB_Info[9]} （预编译二进制包）"
                     Bin="y"
                 else
-                    echo "Default install ${DB_Info[9]} from Source."
+                    echo "默认安装 ${DB_Info[9]} （源码编译）"
                     Bin="n"
                 fi
                 ;;
@@ -282,26 +282,26 @@ Database_Selection()
         fi
         ;;
     11)
-        echo "You will install ${DB_Info[10]}"
+        echo "即将安装 ${DB_Info[10]}"
         if [[ "${DB_ARCH}" = "x86_64" || "${DB_ARCH}" = "i686" || "${DB_ARCH}" = "aarch64" ]]; then
             if [ -z ${Bin} ]; then
-                read -p "Using Generic Binaries [y/n]: " Bin
+                read -p "使用预编译二进制包安装（更快）[y/n]： " Bin
             fi
             case "${Bin}" in
             [yY][eE][sS]|[yY])
-                echo "You will install ${DB_Info[10]} Using Generic Binaries."
+                echo "即将安装 ${DB_Info[10]} （预编译二进制包）"
                 Bin="y"
                 ;;
             [nN][oO]|[nN])
-                echo "You will install ${DB_Info[10]} from Source."
+                echo "即将安装 ${DB_Info[10]} （源码编译）"
                 Bin="n"
                 ;;
             *)
                 if [ "${CheckMirror}" != "n" ]; then
-                    echo "Default install ${DB_Info[10]} Using Generic Binaries."
+                    echo "默认安装 ${DB_Info[10]} （预编译二进制包）"
                     Bin="y"
                 else
-                    echo "Default install ${DB_Info[10]} from Source."
+                    echo "默认安装 ${DB_Info[10]} （源码编译）"
                     Bin="n"
                 fi
                 ;;
@@ -311,15 +311,15 @@ Database_Selection()
         fi
         ;;
     0)
-        echo "Do not install MySQL/MariaDB!"
+        echo "不安装数据库"
         ;;
     *)
-        echo "No input,You will install ${DB_Info[1]}"
+        echo "未输入，默认安装 ${DB_Info[1]}"
         DBSelect="2"
     esac
 
     if [ "${Bin}" != "y" ] && [[ "${DBSelect}" =~ ^5|[7-9]|1[0-1]$ ]] && [ $(awk '/MemTotal/ {printf( "%d\n", $2 / 1024 )}' /proc/meminfo) -le 1024 ]; then
-        echo "Memory less than 1GB, can't install MySQL 8.0 or MairaDB 10.3+!"
+        echo "内存不足 1GB，无法安装 MySQL 8.0 或 MariaDB 10.3+"
         exit 1
     fi
 
@@ -338,35 +338,35 @@ Database_Selection()
         if [ -z ${DB_Root_Password} ]; then
             echo "==========================="
             DB_Root_Password="root"
-            Echo_Yellow "Please setup root password of MySQL."
-            read -p "Please enter: " DB_Root_Password
+            Echo_Yellow "请设置数据库 root 密码"
+            read -p "请输入密码： " DB_Root_Password
             if [ "${DB_Root_Password}" = "" ]; then
-                echo "NO input,password will be generated randomly."
+                echo "未输入密码，将自动生成随机密码"
                 DB_Root_Password="nextlnmp.com#$RANDOM"
             fi
         fi
-        echo "MySQL root password: ${DB_Root_Password}"
+        echo "数据库 root 密码：${DB_Root_Password}"
 
         #do you want to enable or disable the InnoDB Storage Engine?
         echo "==========================="
 
         if [ -z ${InstallInnodb} ]; then
             InstallInnodb="y"
-            Echo_Yellow "Do you want to enable or disable the InnoDB Storage Engine?"
-            read -p "Default enable,Enter your choice [Y/n]: " InstallInnodb
+            Echo_Yellow "是否启用 InnoDB 存储引擎？"
+            read -p "默认启用，请选择 [Y/n]： " InstallInnodb
         fi
 
         case "${InstallInnodb}" in
         [yY][eE][sS]|[yY])
-            echo "You will enable the InnoDB Storage Engine"
+            echo "将启用 InnoDB 存储引擎"
             InstallInnodb="y"
             ;;
         [nN][oO]|[nN])
-            echo "You will disable the InnoDB Storage Engine!"
+            echo "将禁用 InnoDB 存储引擎"
             InstallInnodb="n"
             ;;
         *)
-            echo "No input,The InnoDB Storage Engine will enable."
+            echo "未输入，默认启用 InnoDB"
             InstallInnodb="y"
         esac
     fi
@@ -379,73 +379,73 @@ PHP_Selection()
         echo "==========================="
 
         PHPSelect="3"
-        Echo_Yellow "You have 9 options for your PHP install."
-        echo "1: Install ${PHP_Info[0]}"
-        echo "2: Install ${PHP_Info[1]}"
-        echo "3: Install ${PHP_Info[2]}"
-        echo "4: Install ${PHP_Info[3]}"
-        echo "5: Install ${PHP_Info[4]} (Default)"
-        echo "6: Install ${PHP_Info[5]}"
-        echo "7: Install ${PHP_Info[6]}"
-        echo "8: Install ${PHP_Info[7]}"
-        echo "9: Install ${PHP_Info[8]}"
-        echo "10: Install ${PHP_Info[9]}"
-        echo "11: Install ${PHP_Info[10]}"
-        echo "12: Install ${PHP_Info[11]}"
-        echo "13: Install ${PHP_Info[12]}"
-        echo "14: Install ${PHP_Info[13]}"
-        read -p "Enter your choice (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14): " PHPSelect
+        Echo_Yellow "请选择 PHP 版本："
+        echo "1: 安装 ${PHP_Info[0]}"
+        echo "2: 安装 ${PHP_Info[1]}"
+        echo "3: 安装 ${PHP_Info[2]}"
+        echo "4: 安装 ${PHP_Info[3]}"
+        echo "5: 安装 ${PHP_Info[4]} (Default)"
+        echo "6: 安装 ${PHP_Info[5]}"
+        echo "7: 安装 ${PHP_Info[6]}"
+        echo "8: 安装 ${PHP_Info[7]}"
+        echo "9: 安装 ${PHP_Info[8]}"
+        echo "10: 安装 ${PHP_Info[9]}"
+        echo "11: 安装 ${PHP_Info[10]}"
+        echo "12: 安装 ${PHP_Info[11]}"
+        echo "13: 安装 ${PHP_Info[12]}"
+        echo "14: 安装 ${PHP_Info[13]}"
+        read -p "请输入选项（1-14）： " PHPSelect
     fi
 
     case "${PHPSelect}" in
     1)
-        echo "You will install ${PHP_Info[0]}"
+        echo "即将安装 ${PHP_Info[0]}"
         if [[ "${DBSelect}" = 0 ]]; then
-            echo "You didn't select MySQL/MariaDB can't select ${PHP_Info[0]}!"
+            echo "未安装数据库，无法选择 ${PHP_Info[0]}"
             exit 1
         fi
         ;;
     2)
-        echo "You will install ${PHP_Info[1]}"
+        echo "即将安装 ${PHP_Info[1]}"
         ;;
     3)
-        echo "You will Install ${PHP_Info[2]}"
+        echo "即将安装 ${PHP_Info[2]}"
         ;;
     4)
-        echo "You will install ${PHP_Info[3]}"
+        echo "即将安装 ${PHP_Info[3]}"
         ;;
     5)
-        echo "You will install ${PHP_Info[4]}"
+        echo "即将安装 ${PHP_Info[4]}"
         ;;
     6)
-        echo "You will install ${PHP_Info[5]}"
+        echo "即将安装 ${PHP_Info[5]}"
         ;;
     7)
-        echo "You will install ${PHP_Info[6]}"
+        echo "即将安装 ${PHP_Info[6]}"
         ;;
     8)
-        echo "You will install ${PHP_Info[7]}"
+        echo "即将安装 ${PHP_Info[7]}"
         ;;
     9)
-        echo "You will install ${PHP_Info[8]}"
+        echo "即将安装 ${PHP_Info[8]}"
         ;;
     10)
-        echo "You will install ${PHP_Info[9]}"
+        echo "即将安装 ${PHP_Info[9]}"
         ;;
     11)
-        echo "You will install ${PHP_Info[10]}"
+        echo "即将安装 ${PHP_Info[10]}"
         ;;
     12)
-        echo "You will install ${PHP_Info[11]}"
+        echo "即将安装 ${PHP_Info[11]}"
         ;;
     13)
-        echo "You will install ${PHP_Info[12]}"
+        echo "即将安装 ${PHP_Info[12]}"
         ;;
     14)
-        echo "You will install ${PHP_Info[13]}"
+        echo "即将安装 ${PHP_Info[13]}"
         ;;
     *)
-        echo "No input,You will install ${PHP_Info[4]}"
+        echo "未输入，默认安装 ${PHP_Info[4]}"
         PHPSelect="5"
     esac
 }
@@ -457,25 +457,25 @@ MemoryAllocator_Selection()
         echo "==========================="
 
         SelectMalloc="1"
-        Echo_Yellow "You have 3 options for your Memory Allocator install."
-        echo "1: Don't install Memory Allocator. (Default)"
-        echo "2: Install Jemalloc"
-        echo "3: Install TCMalloc"
-        read -p "Enter your choice (1, 2 or 3): " SelectMalloc
+        Echo_Yellow "请选择内存分配器："
+        echo "1: 不安装（默认）"
+        echo "2: 安装 Jemalloc"
+        echo "3: 安装 TCMalloc"
+        read -p "请输入选项（1-3）： " SelectMalloc
     fi
 
     case "${SelectMalloc}" in
     1)
-        echo "You will install not install Memory Allocator."
+        echo "不安装内存分配器"
         ;;
     2)
-        echo "You will install JeMalloc"
+        echo "即将安装 Jemalloc"
         ;;
     3)
-        echo "You will Install TCMalloc"
+        echo "即将安装 TCMalloc"
         ;;
     *)
-        echo "No input,You will not install Memory Allocator."
+        echo "未输入，默认不安装内存分配器"
         SelectMalloc="1"
     esac
 
@@ -509,10 +509,10 @@ Apache_Selection()
     #set Server Administrator Email Address
     if [ -z ${ServerAdmin} ]; then
         ServerAdmin=""
-        read -p "Please enter Administrator Email Address: " ServerAdmin
+        read -p "请输入管理员邮箱： " ServerAdmin
     fi
     if [ "${ServerAdmin}" == "" ]; then
-        echo "Administrator Email Address will set to webmaster@example.com!"
+        echo "未输入，默认使用 webmaster@example.com"
         ServerAdmin="webmaster@example.com"
     else
         echo "==========================="
@@ -524,23 +524,23 @@ Apache_Selection()
 #which Apache Version do you want to install?
     if [ -z ${ApacheSelect} ]; then
         ApacheSelect="1"
-        Echo_Yellow "You have 2 options for your Apache install."
-        echo "1: Install ${Apache_Info[0]}"
-        echo "2: Install ${Apache_Info[1]} (Default)"
-        read -p "Enter your choice (1 or 2): " ApacheSelect
+        Echo_Yellow "请选择 Apache 版本："
+        echo "1: 安装 ${Apache_Info[0]}"
+        echo "2: 安装 ${Apache_Info[1]} (Default)"
+        read -p "请输入选项（1 或 2）： " ApacheSelect
     fi
 
     if [ "${ApacheSelect}" = "1" ]; then
-        echo "You will install ${Apache_Info[0]}"
+        echo "即将安装 ${Apache_Info[0]}"
     elif [ "${ApacheSelect}" = "2" ]; then
-        echo "You will install ${Apache_Info[1]}"
+        echo "即将安装 ${Apache_Info[1]}"
     else
-        echo "No input,You will install ${Apache_Info[1]}"
+        echo "未输入，默认安装 ${Apache_Info[1]}"
         ApacheSelect="2"
     fi
     if [[ "${PHPSelect}" = "1" && "${ApacheSelect}" = "2" ]]; then
-        Echo_Red "PHP 5.2.17 is not compatible with Apache 2.4.*."
-        Echo_Red "Force use Apache 2.2.31"
+        Echo_Red "PHP 5.2.17 与 Apache 2.4 不兼容"
+        Echo_Red "已自动切换为 Apache 2.2.31"
         ApacheSelect="1"
     fi
 }
@@ -566,7 +566,7 @@ Press_Install()
 {
     if [ -z ${nextLNMP_Auto} ]; then
         echo ""
-        Echo_Green "Press any key to install...or Press Ctrl+c to cancel"
+        Echo_Green "按任意键开始安装...按 Ctrl+C 取消"
         OLDCONFIG=`stty -g`
         stty -icanon -echo min 1 time 0
         dd count=1 2>/dev/null
@@ -579,7 +579,7 @@ Press_Install()
 Press_Start()
 {
     echo ""
-    Echo_Green "Press any key to start...or Press Ctrl+c to cancel"
+    Echo_Green "按任意键开始...按 Ctrl+C 取消"
     OLDCONFIG=`stty -g`
     stty -icanon -echo min 1 time 0
     dd count=1 2>/dev/null
@@ -588,7 +588,7 @@ Press_Start()
 
 Install_LSB()
 {
-    echo "[+] Installing lsb..."
+    echo "[+] 正在安装 lsb..."
     if [ "$PM" = "yum" ]; then
         yum -y install redhat-lsb
     elif [ "$PM" = "apt" ]; then
@@ -759,17 +759,17 @@ Download_Files()
     
     # First run: download checksums file
     if [ ! -f "${SHA256_FILE}" ]; then
-        echo "Downloading SHA256 checksums..."
+        echo "正在下载 SHA256 校验文件..."
         wget -q --no-check-certificate -O "${SHA256_FILE}" "${Download_Mirror}/sha256sums.txt"
     fi
     
     if [ -s "${FileName}" ]; then
-        echo "${FileName} [found]"
+        echo "${FileName} [已存在]"
     else
-        echo "Downloading ${FileName}..."
+        echo "正在下载 ${FileName}..."
         wget -c --progress=bar:force --prefer-family=IPv4 --no-check-certificate ${URL}
         if [ $? -ne 0 ]; then
-            echo "ERROR: Failed to download ${FileName}"
+            echo "❌ 下载失败：${FileName}"
             exit 1
         fi
     fi
@@ -780,16 +780,16 @@ Download_Files()
         local expected_sha256=$(grep "${FileName}" "${SHA256_FILE}" | awk "{print \$1}" | head -1)
         if [ -n "${expected_sha256}" ]; then
             if [ "${actual_sha256}" != "${expected_sha256}" ]; then
-                echo "ERROR: SHA256 mismatch for ${FileName}"
-                echo "  Expected: ${expected_sha256}"
-                echo "  Actual:   ${actual_sha256}"
+                echo "❌ SHA256 校验失败：${FileName}"
+                echo "  期望值：${expected_sha256}"
+                echo "  实际值：${actual_sha256}"
                 rm -f "${FileName}"
                 exit 1
             else
-                echo "${FileName} SHA256 verified OK"
+                echo "${FileName} ✓ SHA256 校验通过"
             fi
         else
-            echo "WARN: No SHA256 checksum found for ${FileName}, skipping verification"
+            echo "⚠️  未找到 ${FileName} 的校验值，跳过校验"
         fi
     fi
 }
@@ -800,7 +800,7 @@ Tar_Cd()
     local extension=${FileName##*.}
     cd ${cur_dir}/src
     [[ -d "${DirName}" ]] && rm -rf ${DirName}
-    echo "Uncompress ${FileName}..."
+    echo "正在解压 ${FileName}..."
     if [ "$extension" == "gz" ] || [ "$extension" == "tgz" ]; then
         tar zxf "${FileName}"
     elif [ "$extension" == "bz2" ]; then
@@ -809,7 +809,7 @@ Tar_Cd()
         tar Jxf "${FileName}"
     fi
     if [ -n "${DirName}" ]; then
-        echo "cd ${DirName}..."
+        echo "进入 ${DirName}..."
         cd ${DirName}
     fi
 }
@@ -817,22 +817,22 @@ Tar_Cd()
 Check_nextLNMPConf()
 {
     if [ ! -s "${cur_dir}/nextlnmp.conf" ]; then
-        Echo_Red "nextlnmp.conf was not exsit!"
+        Echo_Red "❌ 未找到 nextlnmp.conf 配置文件"
         exit 1
     fi
     if [[ "${Download_Mirror}" = "" || "${MySQL_Data_Dir}" = "" || "${MariaDB_Data_Dir}" = "" || "${Default_Website_Dir}" = "" ]]; then
-        Echo_Red "Can't get values from nextlnmp.conf!"
+        Echo_Red "❌ 无法读取 nextlnmp.conf 配置"
         exit 1
     fi
     if [[ "${MySQL_Data_Dir}" = "/" || "${MariaDB_Data_Dir}" = "/" || "${Default_Website_Dir}" = "/" ]]; then
-        Echo_Red "Can't set MySQL/MariaDB/Website Directory to / !"
+        Echo_Red "❌ 数据库/网站目录不能设为根目录 /"
         exit 1
     fi
 }
 
 Print_APP_Ver()
 {
-    echo "You will install ${Stack} stack."
+    echo "即将安装 ${Stack} stack."
     if [ "${Stack}" != "lamp" ]; then
         echo "${Nginx_Ver}"
     fi
@@ -842,7 +842,7 @@ Print_APP_Ver()
     elif [[ "${DBSelect}" =~ ^(6|7|8|9|10)$ ]]; then
         echo "${Mariadb_Ver}"
     elif [ "${DBSelect}" = "0" ]; then
-        echo "Do not install MySQL/MariaDB!"
+        echo "不安装数据库"
     fi
 
     echo "${Php_Ver}"
@@ -856,25 +856,25 @@ Print_APP_Ver()
     elif [ "${SelectMalloc}" = "3" ]; then
         echo "${TCMalloc_Ver}"
     fi
-    echo "Enable InnoDB: ${InstallInnodb}"
-    echo "Print nextlnmp.conf infomation..."
-    echo "Download Mirror: ${Download_Mirror}"
-    echo "Nginx Additional Modules: ${Nginx_Modules_Options}"
-    echo "PHP Additional Modules: ${PHP_Modules_Options}"
+    echo "InnoDB 引擎：${InstallInnodb}"
+    echo "nextlnmp.conf 配置信息："
+    echo "下载镜像站：${Download_Mirror}"
+    echo "Nginx 额外模块：${Nginx_Modules_Options}"
+    echo "PHP 额外模块：${PHP_Modules_Options}"
     if [ "${Enable_PHP_Fileinfo}" = "y" ]; then
-        echo "enable PHP fileinfo."
+        echo "启用 PHP fileinfo"
     fi
     if [ "${Enable_Nginx_Lua}" = "y" ]; then
-        echo "enable Nginx Lua."
+        echo "启用 Nginx Lua"
     fi
     if [[ "${DBSelect}" =~ ^(1|2|3|4|5|11)$ ]]; then
-        echo "Database Directory: ${MySQL_Data_Dir}"
+        echo "数据库目录：${MySQL_Data_Dir}"
     elif [[ "${DBSelect}" =~ ^(6|7|8|9|10)$ ]]; then
-        echo "Database Directory: ${MariaDB_Data_Dir}"
+        echo "数据库目录：${MariaDB_Data_Dir}"
     elif [ "${DBSelect}" = "0" ]; then
-        echo "Do not install MySQL/MariaDB!"
+        echo "不安装数据库"
     fi
-    echo "Default Website Directory: ${Default_Website_Dir}"
+    echo "网站根目录：${Default_Website_Dir}"
 }
 
 Print_Sys_Info()
@@ -885,7 +885,7 @@ Print_Sys_Info()
     cat /etc/*-release
     uname -a
     MemTotal=$(awk '/MemTotal/ {printf( "%d\n", $2 / 1024 )}' /proc/meminfo)
-    echo "Memory is: ${MemTotal} MB "
+    echo "内存：${MemTotal} MB"
     df -h
     Check_Openssl
     Check_WSL
@@ -899,7 +899,7 @@ Print_Sys_Info()
 StartUp()
 {
     init_name=$1
-    echo "Add ${init_name} service at system startup..."
+    echo "正在设置 ${init_name} 开机自启..."
     [[ "${isWSL}" = "" ]] && Check_WSL
     [[ "${isDocker}" = "" ]] && Check_Docker
     if [ "${isWSL}" = "n" ] && [ "${isDocker}" = "n" ] && command -v systemctl >/dev/null 2>&1 && [[ -s /etc/systemd/system/${init_name}.service || -s /lib/systemd/system/${init_name}.service || -s /usr/lib/systemd/system/${init_name}.service ]]; then
@@ -918,7 +918,7 @@ StartUp()
 Remove_StartUp()
 {
     init_name=$1
-    echo "Removing ${init_name} service at system startup..."
+    echo "正在移除 ${init_name} 开机自启..."
     [[ "${isWSL}" = "" ]] && Check_WSL
     [[ "${isDocker}" = "" ]] && Check_Docker
     if [ "${isWSL}" = "n" ] && [ "${isDocker}" = "n" ] && command -v systemctl >/dev/null 2>&1 && [[ -s /etc/systemd/system/${init_name}.service || -s /lib/systemd/system/${init_name}.service || -s /usr/lib/systemd/system/${init_name}.service ]]; then
@@ -956,14 +956,14 @@ Check_Mirror()
             apt-get install -y curl
         fi
     fi
-    echo "Checking download mirror..."
+    echo "正在检测镜像站..."
     mirror_code=$(curl -o /dev/null -m 10 --connect-timeout 10 -sk -w %{http_code} https://mirror.zhangmei.com/sha256sums.txt)
     if [[ "${mirror_code}" = "200" ]]; then
-        echo "Mirror https://mirror.zhangmei.com is OK"
+        echo "✓ 镜像站连接正常"
     else
-        echo "ERROR: Cannot connect to download mirror (HTTP ${mirror_code})"
-        echo "Please check your network or modify nextlnmp.conf manually."
-        echo "More info: https://nextlnmp.com"
+        echo "❌ 无法连接镜像站（HTTP ${mirror_code}）"
+        echo "请检查网络或手动修改 nextlnmp.conf"
+        echo "帮助文档：https://nextlnmp.com"
         exit 1
     fi
 }
@@ -971,19 +971,19 @@ Check_CMPT()
 {
     if [[ "${DBSelect}" = "5" && "${Bin}" != "y" ]]; then
         if echo "${Ubuntu_Version}" | grep -Eqi "^1[0-7]\." || echo "${Debian_Version}" | grep -Eqi "^[4-8]" || echo "${Raspbian_Version}" | grep -Eqi "^[4-8]" || echo "${CentOS_Version}" | grep -Eqi "^[4-7]"  || echo "${RHEL_Version}" | grep -Eqi "^[4-7]" || echo "${Fedora_Version}" | grep -Eqi "^2[0-3]"; then
-            Echo_Red "MySQL 8.0 please use latest linux distributions!"
+            Echo_Red "MySQL 8.0 需要较新的系统版本"
             exit 1
         fi
     fi
     if [[ "${PHPSelect}" =~ ^1[0-3]$ ]]; then
         if echo "${Ubuntu_Version}" | grep -Eqi "^1[0-7]\." || echo "${Debian_Version}" | grep -Eqi "^[4-8]" || echo "${Raspbian_Version}" | grep -Eqi "^[4-8]" || echo "${CentOS_Version}" | grep -Eqi "^[4-6]"  || echo "${RHEL_Version}" | grep -Eqi "^[4-6]" || echo "${Fedora_Version}" | grep -Eqi "^2[0-3]"; then
-            Echo_Red "PHP 7.4 and PHP 8.* please use latest linux distributions!"
+            Echo_Red "PHP 7.4 及 8.x 需要较新的系统版本"
             exit 1
         fi
     fi
     if [[ "${PHPSelect}" = "1" ]]; then
         if echo "${Ubuntu_Version}" | grep -Eqi "^19|2[0-7]\." || echo "${Debian_Version}" | grep -Eqi "^1[0-9]" || echo "${Raspbian_Version}" | grep -Eqi "^1[0-9]" || echo "${Deepin_Version}" | grep -Eqi "^2[0-9]" || echo "${UOS_Version}" | grep -Eqi "^2[0-9]" || echo "${Fedora_Version}" | grep -Eqi "^29|3[0-9]"; then
-            Echo_Red "PHP 5.2 is not supported on very new linux versions such as Ubuntu 19+, Debian 10, Deepin 20+, Fedora 29+ etc."
+            Echo_Red "PHP 5.2 不支持 Ubuntu 19+、Debian 10+、Deepin 20+ 等较新系统"
             exit 1
         fi
     fi
@@ -1076,12 +1076,12 @@ Verify_DB_Password()
     Check_DB
     status=1
     while [ $status -eq 1 ]; do
-        read -s -p "Enter current root password of Database (Password will not shown): " DB_Root_Password
+        read -s -p "请输入当前数据库 root 密码（不会显示）： " DB_Root_Password
         Make_TempMycnf "${DB_Root_Password}"
         Do_Query ""
         status=$?
     done
-    echo "OK, MySQL root password correct."
+    echo "✓ 数据库密码验证通过"
 }
 
 TempMycnf_Clean()
@@ -1109,7 +1109,7 @@ StartOrStop()
 
 Check_WSL() {
     if [[ "$(< /proc/sys/kernel/osrelease)" == *[Mm]icrosoft* ]]; then
-        echo "running on WSL"
+        echo "检测到 WSL 环境"
         isWSL="y"
     else
         isWSL="n"
@@ -1118,13 +1118,13 @@ Check_WSL() {
 
 Check_Docker() {
     if [ -f /.dockerenv ]; then
-        echo "running on Docker"
+        echo "检测到 Docker 环境"
         isDocker="y"
     elif [ -f /proc/1/cgroup ] && grep -q docker /proc/1/cgroup; then
-        echo "running on Docker"
+        echo "检测到 Docker 环境"
         isDocker="y"
     elif [ -f /proc/self/cgroup ] && grep -q docker /proc/self/cgroup; then
-        echo "running on Docker"
+        echo "检测到 Docker 环境"
         isDocker="y"
     else
         isDocker="n"
@@ -1134,7 +1134,7 @@ Check_Docker() {
 Check_Openssl()
 {
     if ! command -v openssl >/dev/null 2>&1; then
-        Echo_Blue "[+] Installing openssl..."
+        Echo_Blue "[+] 正在安装 openssl..."
         if [ "${PM}" = "yum" ]; then
             yum install -y openssl
         elif [ "${PM}" = "apt" ]; then
