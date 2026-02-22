@@ -226,25 +226,37 @@ Clean_Web_Src_Dir()
 Print_Sucess_Info()
 {
     Clean_Web_Src_Dir
-    echo "+------------------------------------------------------------------------+"
-    echo "|          nextLNMP V${NEXTLNMP_Ver} for ${DISTRO} Linux Server, by nextLNMP team     |"
-    echo "+------------------------------------------------------------------------+"
-    echo "|           For more information please visit https://nextlnmp.com           |"
-    echo "+------------------------------------------------------------------------+"
-    echo "|    nextlnmp status manage: nextlnmp {start|stop|reload|restart|kill|status}    |"
-    echo "+------------------------------------------------------------------------+"
-    echo "|  phpMyAdmin: http://IP/phpmyadmin/                                     |"
-    echo "|  phpinfo: http://IP/phpinfo.php                                        |"
-    echo "|  Prober:  http://IP/p.php                                              |"
-    echo "+------------------------------------------------------------------------+"
-    echo "|  Add VirtualHost: nextlnmp vhost add                                       |"
-    echo "+------------------------------------------------------------------------+"
-    echo "|  Default directory: ${Default_Website_Dir}                              |"
+    local SERVER_IP=$(hostname -I | awk '{print $1}')
+    echo ""
+    Echo_Green "╔══════════════════════════════════════════════════════════════╗"
+    Echo_Green "║                                                              ║"
+    Echo_Green "║        nextLNMP V${NEXTLNMP_Ver} 安装成功！                  ║"
+    Echo_Green "║        系统：${DISTRO} Linux · 作者：静水流深                ║"
+    Echo_Green "║                                                              ║"
+    Echo_Green "╠══════════════════════════════════════════════════════════════╣"
+    echo "║"
+    echo "║  📦 服务管理："
+    echo "║     nextlnmp {start|stop|restart|reload|status}"
+    echo "║"
+    echo "║  🌐 Web 访问："
+    echo "║     探针页面：http://${SERVER_IP}/p.php"
+    echo "║     phpMyAdmin：http://${SERVER_IP}/phpmyadmin/"
+    echo "║     PHP 信息：http://${SERVER_IP}/phpinfo.php"
+    echo "║"
+    echo "║  📁 网站目录：${Default_Website_Dir}"
+    echo "║  🔧 添加站点：nextlnmp vhost add"
     if [ "${DBSelect}" != "0" ]; then
-        echo "+------------------------------------------------------------------------+"
-        echo "|  MySQL/MariaDB root password: ${DB_Root_Password}                          |"
+        echo "║"
+        echo "║  🔑 数据库 root 密码：${DB_Root_Password}"
+        echo "║     查看密码：nextlnmp password"
+        echo "║     记住后删除：nextlnmp password --delete"
     fi
-    echo "+------------------------------------------------------------------------+"
+    echo "║"
+    echo "║  📖 文档：https://nextlnmp.com"
+    echo "║  💬 QQ群：615298"
+    Echo_Green "║                                                              ║"
+    Echo_Green "╚══════════════════════════════════════════════════════════════╝"
+    echo ""
     nextlnmp status
     if command -v ss >/dev/null 2>&1; then
         ss -ntl
@@ -252,8 +264,8 @@ Print_Sucess_Info()
         netstat -ntl
     fi
     stop_time=$(date +%s)
-    echo "Install nextlnmp takes $(((stop_time-start_time)/60)) minutes."
-    Echo_Green "Install nextlnmp V${NEXTLNMP_Ver} completed! enjoy it."
+    echo ""
+    Echo_Green "✅ 安装完成！耗时 $(((stop_time-start_time)/60)) 分钟"
 }
 
 Print_Failed_Info()
@@ -261,9 +273,14 @@ Print_Failed_Info()
     if [ -s /bin/nextlnmp ]; then
         rm -f /bin/nextlnmp
     fi
-    Echo_Red "Sorry, Failed to install nextLNMP!"
-    Echo_Red "Please visit https://bbs.nextlnmp.com/forum-25-1.html feedback errors and logs."
-    Echo_Red "You can download /root/nextlnmp-install.log from your server,and upload nextlnmp-install.log to nextLNMP Forum."
+    echo ""
+    Echo_Red "╔══════════════════════════════════════════════════════════════╗"
+    Echo_Red "║            ❌ nextLNMP 安装失败                             ║"
+    Echo_Red "╚══════════════════════════════════════════════════════════════╝"
+    Echo_Red "请将安装日志反馈给我们："
+    Echo_Red "  日志文件：/root/nextlnmp-install.log"
+    Echo_Red "  反馈地址：https://nextlnmp.com"
+    Echo_Red "  QQ群：615298"
 }
 
 Check_nextLNMP_Install()

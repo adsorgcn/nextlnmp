@@ -15,7 +15,7 @@
 ### END INIT INFO
 
 # Author:   licess
-# website:  https://lnmp.org
+# website:  https://nextlnmp.com
 
 NGINX_BIN='/usr/local/nginx/sbin/nginx'
 CONFIG='/usr/local/nginx/conf/nginx.conf'

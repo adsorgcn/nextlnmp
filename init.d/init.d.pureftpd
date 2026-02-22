@@ -15,7 +15,7 @@
 ### END INIT INFO
 
 # Author:   licess
-# website:  https://lnmp.org
+# website:  https://nextlnmp.com
 
 # Pure-FTPd Settings
 PURE_FTPD="/usr/local/pureftpd/sbin/pure-ftpd"
