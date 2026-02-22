@@ -105,7 +105,7 @@ Database_Selection()
                 Bin="n"
                 ;;
             *)
-                Bin="n"
+                Bin="y"
                 ;;
             esac
         else
@@ -133,7 +133,7 @@ Database_Selection()
                     Bin="y"
                 else
                     echo "默认安装 ${DB_Info[2]} （源码编译）"
-                    Bin="n"
+                    Bin="y"
                 fi
                 ;;
             esac
@@ -161,7 +161,7 @@ Database_Selection()
                     Bin="y"
                 else
                     echo "默认安装 ${DB_Info[3]} （源码编译）"
-                    Bin="n"
+                    Bin="y"
                 fi
                 ;;
             esac
@@ -189,7 +189,7 @@ Database_Selection()
                     Bin="y"
                 else
                     echo "默认安装 ${DB_Info[4]} （源码编译）"
-                    Bin="n"
+                    Bin="y"
                 fi
                 ;;
             esac
@@ -218,7 +218,7 @@ Database_Selection()
                     Bin="y"
                 else
                     echo "默认安装 ${DB_Info[5]} （源码编译）"
-                    Bin="n"
+                    Bin="y"
                 fi
                 ;;
             esac
@@ -247,7 +247,7 @@ Database_Selection()
                     Bin="y"
                 else
                     echo "默认安装 ${DB_Info[6]} （源码编译）"
-                    Bin="n"
+                    Bin="y"
                 fi
                 ;;
             esac
@@ -276,7 +276,7 @@ Database_Selection()
                     Bin="y"
                 else
                     echo "默认安装 ${DB_Info[7]} （源码编译）"
-                    Bin="n"
+                    Bin="y"
                 fi
                 ;;
             esac
@@ -305,7 +305,7 @@ Database_Selection()
                     Bin="y"
                 else
                     echo "默认安装 ${DB_Info[8]} （源码编译）"
-                    Bin="n"
+                    Bin="y"
                 fi
                 ;;
             esac
@@ -334,7 +334,7 @@ Database_Selection()
                     Bin="y"
                 else
                     echo "默认安装 ${DB_Info[9]} （源码编译）"
-                    Bin="n"
+                    Bin="y"
                 fi
                 ;;
             esac
@@ -363,7 +363,7 @@ Database_Selection()
                     Bin="y"
                 else
                     echo "默认安装 ${DB_Info[10]} （源码编译）"
-                    Bin="n"
+                    Bin="y"
                 fi
                 ;;
             esac
