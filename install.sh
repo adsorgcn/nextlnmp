@@ -344,7 +344,7 @@ extract_and_run() {
     # 找主安装脚本
     cd "${INSTALL_DIR}"
     local main_script=""
-    for candidate in nextlnmp.sh lnmp.sh; do
+    for candidate in install.sh nextlnmp.sh lnmp.sh; do
         if [[ -f "${candidate}" ]]; then
             main_script="${candidate}"
             break
