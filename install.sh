@@ -2,7 +2,7 @@
 # ============================================================================
 # NextLNMP 一键安装引导脚本 v1.4.0
 # 用法：bash <(curl -sL https://gitee.com/palmmedia/nextlnmp/raw/main/install.sh)
-# 项目：https://github.com/adsorgcn/nextlnmp
+# 项目：https://github.com/NextLNMP/nextlnmp
 # 作者：静水流深 · 掌媒科技有限公司
 # 授权：GPL-3.0
 # ============================================================================
@@ -27,7 +27,7 @@ TMP_FILE="/tmp/nextlnmp-${NEXTLNMP_VER}.tar.gz"
 # ── 下载源（按优先级）────────────────────────────────────────────────
 MIRROR_URL="https://mirror.zhangmei.com/nextlnmp-${NEXTLNMP_VER}.tar.gz"
 GITEE_URL="https://gitee.com/palmmedia/nextlnmp/releases/download/v${NEXTLNMP_VER}/nextlnmp-${NEXTLNMP_VER}.tar.gz"
-GITHUB_URL="https://github.com/adsorgcn/nextlnmp/releases/download/v${NEXTLNMP_VER}/nextlnmp-${NEXTLNMP_VER}.tar.gz"
+GITHUB_URL="https://github.com/NextLNMP/nextlnmp/releases/download/v${NEXTLNMP_VER}/nextlnmp-${NEXTLNMP_VER}.tar.gz"
 
 # ====================================================================
 # 步骤 1：root 权限检查

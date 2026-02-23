@@ -93,7 +93,7 @@ wget https://gitee.com/palmmedia/nextlnmp/releases/download/v1.3.4/nextlnmp-1.3.
 **方式三：从 GitHub 下载安装**
 
 ```bash
-wget https://github.com/adsorgcn/nextlnmp/releases/download/v1.3.4/nextlnmp-1.3.4.tar.gz && tar zxf nextlnmp-1.3.4.tar.gz && cd nextlnmp-1.3.4 && bash install.sh
+wget https://github.com/NextLNMP/nextlnmp/releases/download/v1.3.4/nextlnmp-1.3.4.tar.gz && tar zxf nextlnmp-1.3.4.tar.gz && cd nextlnmp-1.3.4 && bash install.sh
 ```
 
 三种方式装出来的东西完全一样，选哪个都行。
@@ -409,7 +409,7 @@ NextLNMP 采用 GPL-3.0 + 商业双授权模式：
 - **QQ群：** 615298
 - **作者：** 静水流深
 - **网站：** [中国站长](https://cnwebmasters.com)
-- **问题反馈：** [Gitee Issues](https://gitee.com/palmmedia/nextlnmp/issues) · [GitHub Issues](https://github.com/adsorgcn/nextlnmp/issues)
+- **问题反馈：** [Gitee Issues](https://gitee.com/palmmedia/nextlnmp/issues) · [GitHub Issues](https://github.com/NextLNMP/nextlnmp/issues)
 
 ## 🤝 相关项目
 
@@ -419,7 +419,7 @@ NextLNMP 采用 GPL-3.0 + 商业双授权模式：
 |------|------|------|
 | **VPSCheck** | VPS 全能检测（流媒体/AI/回程/跑分） | [GitHub](https://github.com/adsorgcn/vpscheck) · [Gitee](https://gitee.com/palmmedia/vpscheck) |
 | **BBR 一键加速** | Google BBR 拥塞控制一键开启 | [GitHub](https://github.com/adsorgcn/bbr-script) · [Gitee](https://gitee.com/palmmedia/bbr-script) |
-| **NextLNMP** | 安全可信的 LNMP 一键安装（本项目） | [GitHub](https://github.com/adsorgcn/nextlnmp) · [Gitee](https://gitee.com/palmmedia/nextlnmp) |
+| **NextLNMP** | 安全可信的 LNMP 一键安装（本项目） | [GitHub](https://github.com/NextLNMP/nextlnmp) · [Gitee](https://gitee.com/palmmedia/nextlnmp) |
 
 **推荐部署流程：** VPSCheck 检测 → BBR 加速 → NextLNMP 部署
 
@@ -440,7 +440,7 @@ Copyright © 2026 掌媒科技有限公司. All rights reserved.
 
 **如果这个项目对你有帮助，请给个 ⭐ Star 支持一下！**
 
-👉 [Gitee](https://gitee.com/palmmedia/nextlnmp) · [GitHub](https://github.com/adsorgcn/nextlnmp)
+👉 [Gitee](https://gitee.com/palmmedia/nextlnmp) · [GitHub](https://github.com/NextLNMP/nextlnmp)
 
 Made with ❤️ by 静水流深 | 掌媒科技有限公司
 
