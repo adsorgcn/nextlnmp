@@ -1208,24 +1208,32 @@ fi
 
 Install_PHP_82()
 {
-    Install_Libzip
-    Echo_Blue "[+] Installing ${Php_Ver}"
-    Tar_Cd ${Php_Ver}.tar.bz2 ${Php_Ver}
-    if [ "${Stack}" = "nextlnmp" ]; then
-        ./configure --prefix=/usr/local/php --with-config-file-path=/usr/local/php/etc --with-config-file-scan-dir=/usr/local/php/conf.d --enable-fpm --with-fpm-user=www --with-fpm-group=www --enable-mysqlnd --with-mysqli=mysqlnd --with-pdo-mysql=mysqlnd --with-iconv=/usr/local --with-freetype=/usr/local/freetype --with-jpeg --with-zlib --enable-xml --disable-rpath --enable-bcmath --enable-shmop --enable-sysvsem ${with_curl} --enable-mbregex --enable-mbstring --enable-intl --enable-pcntl --enable-ftp --enable-gd ${with_openssl} --with-mhash --enable-pcntl --enable-sockets --with-zip --enable-soap --with-gettext ${with_fileinfo} --enable-opcache --with-xsl --with-pear --with-webp ${PHP_Buildin_Option} ${PHP_Modules_Options}
+    OS_ID=$(grep "^ID=" /etc/os-release 2>/dev/null | cut -d= -f2 | tr -d '"')
+    OS_VER=$(grep "^VERSION_ID=" /etc/os-release 2>/dev/null | cut -d= -f2 | tr -d '"')
+    if [[ "${OS_ID}" = "ubuntu" && "${OS_VER}" = "22.04" && -f "${cur_dir}/src/php-8.2.28-bin-ubuntu22.tar.gz" ]] || [[ "${OS_ID}" = "debian" && "${OS_VER}" = "12" && -f "${cur_dir}/src/php-8.2.28-bin-debian12.tar.gz" ]]; then
+        Echo_Blue "[+] 急速安装模式：直接解压 PHP 8.2.28 Binary 包"
+        if [[ "${OS_ID}" = "ubuntu" ]]; then
+            tar zxf ${cur_dir}/src/php-8.2.28-bin-ubuntu22.tar.gz -C /usr/local/
+        else
+            tar zxf ${cur_dir}/src/php-8.2.28-bin-debian12.tar.gz -C /usr/local/
+        fi
+        Ln_PHP_Bin
+        mkdir -p /usr/local/php/{etc,conf.d}
+        cp /usr/local/php/lib/php.ini-production /usr/local/php/etc/php.ini 2>/dev/null || touch /usr/local/php/etc/php.ini
     else
-        ./configure --prefix=/usr/local/php --with-config-file-path=/usr/local/php/etc --with-config-file-scan-dir=/usr/local/php/conf.d --with-apxs2=/usr/local/apache/bin/apxs --with-mysqli=mysqlnd --with-pdo-mysql=mysqlnd --with-iconv=/usr/local --with-freetype=/usr/local/freetype --with-jpeg --with-zlib --enable-xml --disable-rpath --enable-bcmath --enable-shmop --enable-sysvsem ${with_curl} --enable-mbregex --enable-mbstring --enable-intl --enable-pcntl --enable-ftp --enable-gd ${with_openssl} --with-mhash --enable-pcntl --enable-sockets --with-zip --enable-soap --with-gettext ${with_fileinfo} --enable-opcache --with-xsl --with-pear --with-webp ${PHP_Buildin_Option} ${PHP_Modules_Options}
+        Install_Libzip
+        Echo_Blue "[+] Installing ${Php_Ver}"
+        Tar_Cd ${Php_Ver}.tar.bz2 ${Php_Ver}
+        if [ "${Stack}" = "nextlnmp" ]; then
+            ./configure --prefix=/usr/local/php --with-config-file-path=/usr/local/php/etc --with-config-file-scan-dir=/usr/local/php/conf.d --enable-fpm --with-fpm-user=www --with-fpm-group=www --enable-mysqlnd --with-mysqli=mysqlnd --with-pdo-mysql=mysqlnd --with-iconv=/usr/local --with-freetype=/usr/local/freetype --with-jpeg --with-zlib --enable-xml --disable-rpath --enable-bcmath --enable-shmop --enable-sysvsem ${with_curl} --enable-mbregex --enable-mbstring --enable-intl --enable-pcntl --enable-ftp --enable-gd ${with_openssl} --with-mhash --enable-pcntl --enable-sockets --with-zip --enable-soap --with-gettext ${with_fileinfo} --enable-opcache --with-xsl --with-pear --with-webp ${PHP_Buildin_Option} ${PHP_Modules_Options}
+        else
+            ./configure --prefix=/usr/local/php --with-config-file-path=/usr/local/php/etc --with-config-file-scan-dir=/usr/local/php/conf.d --with-apxs2=/usr/local/apache/bin/apxs --with-mysqli=mysqlnd --with-pdo-mysql=mysqlnd --with-iconv=/usr/local --with-freetype=/usr/local/freetype --with-jpeg --with-zlib --enable-xml --disable-rpath --enable-bcmath --enable-shmop --enable-sysvsem ${with_curl} --enable-mbregex --enable-mbstring --enable-intl --enable-pcntl --enable-ftp --enable-gd ${with_openssl} --with-mhash --enable-pcntl --enable-sockets --with-zip --enable-soap --with-gettext ${with_fileinfo} --enable-opcache --with-xsl --with-pear --with-webp ${PHP_Buildin_Option} ${PHP_Modules_Options}
+        fi
+        PHP_Make_Install
+        Ln_PHP_Bin
+        mkdir -p /usr/local/php/{etc,conf.d}
+        \cp php.ini-production /usr/local/php/etc/php.ini
     fi
-
-    PHP_Make_Install
-
-    Ln_PHP_Bin
-
-    echo "Copy new php configure file..."
-    mkdir -p /usr/local/php/{etc,conf.d}
-    \cp php.ini-production /usr/local/php/etc/php.ini
-
-    # php extensions
     echo "Modify php.ini......"
     sed -i 's/post_max_size =.*/post_max_size = 50M/g' /usr/local/php/etc/php.ini
     sed -i 's/upload_max_filesize =.*/upload_max_filesize = 50M/g' /usr/local/php/etc/php.ini
@@ -1236,14 +1244,12 @@ Install_PHP_82()
     sed -i 's/disable_functions =.*/disable_functions = passthru,exec,system,chroot,chgrp,chown,shell_exec,proc_open,proc_get_status,popen,ini_alter,ini_restore,dl,openlog,syslog,readlink,symlink,popepassthru,stream_socket_server/g' /usr/local/php/etc/php.ini
     Pear_Pecl_Set
     Install_Composer
-
     cd ${cur_dir}/src
     echo "Install ZendGuardLoader for PHP 8.2..."
     echo "unavailable now."
-
 if [ "${Stack}" = "nextlnmp" ]; then
     echo "Creating new php-fpm configure file..."
-    cat >/usr/local/php/etc/php-fpm.conf<<EOF
+    cat >/usr/local/php/etc/php-fpm.conf<<FPMEOF
 [global]
 pid = /usr/local/php/var/run/php-fpm.pid
 error_log = /usr/local/php/var/log/php-fpm.log
@@ -1268,10 +1274,13 @@ pm.process_idle_timeout = 10s
 request_terminate_timeout = 100
 request_slowlog_timeout = 0
 slowlog = var/log/slow.log
-EOF
-
+FPMEOF
     echo "Copy php-fpm init.d file..."
-    \cp ${cur_dir}/src/${Php_Ver}/sapi/fpm/init.d.php-fpm /etc/init.d/php-fpm
+    if [ -f "${cur_dir}/src/${Php_Ver}/sapi/fpm/init.d.php-fpm" ]; then
+        \cp ${cur_dir}/src/${Php_Ver}/sapi/fpm/init.d.php-fpm /etc/init.d/php-fpm
+    else
+        \cp ${cur_dir}/init.d/php-fpm /etc/init.d/php-fpm 2>/dev/null || true
+    fi
     \cp ${cur_dir}/init.d/php-fpm.service /etc/systemd/system/php-fpm.service
     chmod +x /etc/init.d/php-fpm
 fi
