@@ -2,7 +2,7 @@
 
 <div align="center">
 
-![Version](https://img.shields.io/badge/version-1.3.4-blue.svg)
+![Version](https://img.shields.io/badge/version-1.4.0-blue.svg)
 ![License](https://img.shields.io/badge/license-GPL--3.0-green.svg)
 ![System](https://img.shields.io/badge/system-CentOS%20|%20Ubuntu%20|%20Debian-orange.svg)
 ![PHP](https://img.shields.io/badge/PHP-5.6~8.4-purple.svg)
@@ -350,6 +350,12 @@ NextLNMP 采用 GPL-3.0 + 商业双授权模式：
 </details>
 
 ## 🔄 更新日志
+
+### v1.4.0 (2026-02-23)
+- 🚀 install.sh 整合 BBR 状态机：自动检测内核版本，支持 BBR 一键启用
+- ⚙️ 全自动系统更新（update+upgrade），安装前静默执行
+- 🔧 依赖检测新增 git，环境预检更完整
+- 🔄 内核升级流程全自动，升级后引导用户 reboot 重新运行安装命令
 
 ### v1.3.4 (2026-02-23)
 - 🚀 PHP 8.2 急速安装模式：Ubuntu 22.04 / Debian 12 自动识别，Binary 包直接解压，安装时间从30分钟缩短至1分钟内
