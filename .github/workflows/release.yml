@@ -84,6 +84,7 @@ jobs:
               \"tag_name\": \"v${VERSION}\",
               \"name\": \"NextLNMP v${VERSION}\",
               \"body\": \"## ⚡ 一行安装\\n\`\`\`bash\\nbash <(curl -sL https://gitee.com/palmmedia/nextlnmp/raw/main/install.sh)\\n\`\`\`\\n## 📦 SHA256\\n\`${SHA256}  nextlnmp-${VERSION}.tar.gz\`\",
+              \"target_commitish\": \"main\",
               \"prerelease\": false
             }")
           echo "Gitee API response: $RELEASE"
