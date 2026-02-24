@@ -60,3 +60,13 @@ jobs:
 
             更新内容详见 [README 更新日志](https://github.com/adsorgcn/nextlnmp#-%E6%9B%B4%E6%96%B0%E6%97%A5%E5%BF%97)
           files: nextlnmp-${{ steps.version.outputs.VERSION }}.tar.gz
+      - name: Sync to mirror server
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: 8.148.21.254
+          username: root
+          key: ${{ secrets.MIRROR_SSH_KEY }}
+          script: |
+            cd /data/mirror
+            wget -q -O nextlnmp-${{ steps.version.outputs.VERSION }}.tar.gz https://github.com/NextLNMP/nextlnmp/releases/download/v${{ steps.version.outputs.VERSION }}/nextlnmp-${{ steps.version.outputs.VERSION }}.tar.gz
+            echo "Mirror synced: nextlnmp-${{ steps.version.outputs.VERSION }}.tar.gz"
