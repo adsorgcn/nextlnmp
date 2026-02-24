@@ -70,3 +70,27 @@ jobs:
             cd /data/mirror
             wget -q -O nextlnmp-${{ steps.version.outputs.VERSION }}.tar.gz https://github.com/NextLNMP/nextlnmp/releases/download/v${{ steps.version.outputs.VERSION }}/nextlnmp-${{ steps.version.outputs.VERSION }}.tar.gz
             echo "Mirror synced: nextlnmp-${{ steps.version.outputs.VERSION }}.tar.gz"
+      - name: Create Gitee Release
+        env:
+          GITEE_TOKEN: ${{ secrets.GITEE_TOKEN }}
+          VERSION: ${{ steps.version.outputs.VERSION }}
+          SHA256: ${{ steps.sha256.outputs.SHA256 }}
+        run: |
+          # 创建 Release
+          RELEASE=$(curl -s -X POST "https://gitee.com/api/v5/repos/palmmedia/nextlnmp/releases" \
+            -H "Content-Type: application/json" \
+            -d "{
+              \"access_token\": \"${GITEE_TOKEN}\",
+              \"tag_name\": \"v${VERSION}\",
+              \"name\": \"NextLNMP v${VERSION}\",
+              \"body\": \"## ⚡ 一行安装\\n\`\`\`bash\\nbash <(curl -sL https://gitee.com/palmmedia/nextlnmp/raw/main/install.sh)\\n\`\`\`\\n## 📦 SHA256\\n\`${SHA256}  nextlnmp-${VERSION}.tar.gz\`\",
+              \"prerelease\": false
+            }")
+          RELEASE_ID=$(echo $RELEASE | python3 -c "import sys,json; print(json.load(sys.stdin)['id'])")
+          echo "Gitee Release ID: $RELEASE_ID"
+          # 上传附件
+          curl -s -X POST "https://gitee.com/api/v5/repos/palmmedia/nextlnmp/releases/${RELEASE_ID}/attach_files" \
+            -H "Content-Type: multipart/form-data" \
+            -F "access_token=${GITEE_TOKEN}" \
+            -F "file=@nextlnmp-${VERSION}.tar.gz"
+          echo "Gitee Release attachment uploaded"
