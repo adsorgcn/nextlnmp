@@ -597,15 +597,14 @@ Add_VHost()
     if [ "${access_log}" == "y" ]; then
         touch /home/wwwlogs/${al_name}.log
     fi
-    echo "set permissions of Virtual Host directory......"
-    chmod -R 755 ${vhostdir}
-    chown -R www:www ${vhostdir}
-
     # 解除可能残留的 chattr 不可变属性
     if [ -f "${vhostdir}/.user.ini" ]; then
         chattr -i "${vhostdir}/.user.ini" 2>/dev/null
         rm -f "${vhostdir}/.user.ini"
     fi
+    echo "set permissions of Virtual Host directory......"
+    chmod -R 755 ${vhostdir}
+    chown -R www:www ${vhostdir}
     Add_VHost_Config
 
     cat >${vhostdir}/.user.ini<<EOF
@@ -614,7 +613,10 @@ EOF
     chmod 644 ${vhostdir}/.user.ini
     chattr +i ${vhostdir}/.user.ini
 
-    /etc/init.d/php-fpm reload
+    # 兼容 Binary 安装的多版本 php-fpm
+    for phpfpm in /etc/init.d/php-fpm /etc/init.d/php-fpm[5,7,8].[0-9]; do
+        [ -f "$phpfpm" ] && $phpfpm reload
+    done
 
     if [ "${create_database}" == "y" ]; then
         Add_Database
@@ -797,7 +799,7 @@ Add_Database_Menu()
 {
     auto_db_name=$(echo "${domain}" | sed 's/\.//g' | sed 's/-//g' | cut -c1-16)
     echo ""
-    Echo_Yellow "请输入数据库名（直接回车使用自动生成的：${auto_db_name}）："
+    echo "请输入数据库名（直接回车使用自动生成的：${auto_db_name}）："
     read -e database_name
     if [ "${database_name}" == "" ]; then
         database_name="${auto_db_name}"
@@ -809,7 +811,7 @@ Add_Database_Menu()
     echo "数据库名：${database_name}"
     auto_password=$(< /dev/urandom tr -dc 'A-Za-z0-9' | head -c16)
     echo ""
-    Echo_Yellow "请输入数据库密码（直接回车自动生成随机密码）："
+    echo "请输入数据库密码（直接回车自动生成随机密码）："
     read -e mysql_password
     if [ "${mysql_password}" == "" ]; then
         mysql_password="${auto_password}"
@@ -1146,6 +1148,7 @@ Return_301_Menu()
         echo "不设置 301 跳转。"
         using_301="n"
     else
+        echo ""
         echo "已设置：http://${domain} 自动跳转至 https://${domain}"
         using_301="y"
     fi
@@ -1294,8 +1297,10 @@ Create_SSL_Config()
 
 server
     {
-        listen 443 ssl http2;
-        #listen [::]:443 ssl http2;
+        listen 443 ssl;
+        http2 on;
+        #listen [::]:443 ssl;
+        ##listen [::]:443 ssl;
         server_name ${domain} ${moredomain};
         index index.html index.htm index.php default.html default.htm default.php;
         root  ${vhostdir};
@@ -1347,7 +1352,7 @@ EOF
     fi
 
     if [ "${enable_ipv6}" == "y" ]; then
-        sed -i 's/#listen \[::\]:443 ssl http2;/listen \[::\]:443 ssl http2;/g' /usr/local/nginx/conf/vhost/${domain}.conf
+        sed -i 's/#listen \[::\]:443 ssl;/listen \[::\]:443 ssl;/g' /usr/local/nginx/conf/vhost/${domain}.conf
     fi
 
     echo "Test Nginx configure file......"
