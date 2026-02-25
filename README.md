@@ -2,7 +2,7 @@
 
 <div align="center">
 
-![Version](https://img.shields.io/badge/version-1.5.1-blue.svg)
+![Version](https://img.shields.io/badge/version-1.5.2-blue.svg)
 ![License](https://img.shields.io/badge/license-GPL--3.0-green.svg)
 ![System](https://img.shields.io/badge/system-CentOS%20|%20Ubuntu%20|%20Debian-orange.svg)
 ![PHP](https://img.shields.io/badge/PHP-5.6~8.4-purple.svg)
@@ -89,13 +89,13 @@ bash <(curl -sL https://gitee.com/palmmedia/nextlnmp/raw/main/install.sh)
 **方式二：从 Gitee 下载安装（国内快）**
 
 ```bash
-wget https://gitee.com/palmmedia/nextlnmp/releases/download/v1.5.1/nextlnmp-1.5.1.tar.gz && tar zxf nextlnmp-1.5.1.tar.gz && cd nextlnmp-1.5.1 && bash install.sh
+wget https://gitee.com/palmmedia/nextlnmp/releases/download/v1.5.2/nextlnmp-1.5.2.tar.gz && tar zxf nextlnmp-1.5.2.tar.gz && cd nextlnmp-1.5.2 && bash install.sh
 ```
 
 **方式三：从 GitHub 下载安装**
 
 ```bash
-wget https://github.com/NextLNMP/nextlnmp/releases/download/v1.5.1/nextlnmp-1.5.1.tar.gz && tar zxf nextlnmp-1.5.1.tar.gz && cd nextlnmp-1.5.1 && bash install.sh
+wget https://github.com/NextLNMP/nextlnmp/releases/download/v1.5.2/nextlnmp-1.5.2.tar.gz && tar zxf nextlnmp-1.5.2.tar.gz && cd nextlnmp-1.5.2 && bash install.sh
 ```
 
 三种方式装出来的东西完全一样，选哪个都行。
@@ -279,7 +279,7 @@ NextLNMP 的安全不是一句口号，是工程化落地的完整方案：
 ## 📂 目录结构
 
 ```
-nextlnmp-1.5.1/
+nextlnmp-1.5.2/
 ├── install.sh          # 安装入口
 ├── nextlnmp.conf       # 配置文件（镜像源地址等）
 ├── upgrade.sh          # 升级脚本
@@ -359,6 +359,23 @@ NextLNMP 采用 GPL-3.0 + 商业双授权模式：
 </details>
 
 ## 🔄 更新日志
+
+### v1.5.2 (2026-02-25)
+- 🐛 修复 CI 打包顺序，先回写版本号再打 tarball，解决 banner 显示旧版本号问题
+- ✨ vhost add 全面中文化，所有提示改为中文并注明用途和默认值
+- 🔧 所有交互输入支持退格键修改
+- ✨ 伪静态规则改为数字选择，默认 WordPress
+- ✨ 数据库名自动从域名生成，回车确认无需手动输入
+- ✨ 数据库密码自动随机生成，明文显示，无需用户记忆
+- 🔧 自动读取已保存的 root 密码，无需重复输入
+- ✨ SSL 证书默认邮箱改为 letsencrypt@nextlnmp.cn
+- 🐛 修复 acme.sh 下载源，改为 NextLNMP 镜像站
+- 🐛 修复重建站点时 .user.ini 权限报错问题
+- 🐛 修复 php-fpm reload 兼容多版本路径
+- 🐛 修复数据库名/密码提示显示混乱问题
+- 🐛 修复 nginx http2 语法警告
+- ✨ nextlnmp ssl add 重写为站点列表选择模式
+
 
 ### v1.5.1 (2026-02-24)
 - 🎨 安装完成界面新增中国站长论坛标志（https://cnwebmasters.com），致敬情怀
