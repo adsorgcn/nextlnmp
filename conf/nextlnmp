@@ -457,7 +457,7 @@ Add_VHost()
 {
     domain=""
     while :;do
-        Echo_Yellow "请输入主域名（例如：nextlnmp.cn）："
+        echo "请输入主域名（例如：nextlnmp.cn）："
         read -e domain
         if [ "${domain}" != "" ] && [[ "$domain" = "${domain%[[:space:]]*}" ]]; then
             if [ -f "/usr/local/nginx/conf/vhost/${domain}.conf" ]; then
@@ -473,7 +473,7 @@ Add_VHost()
     done
 
     echo ""
-    Echo_Yellow "请输入其他绑定域名，多个用空格分隔（例如：www.nextlnmp.cn，直接回车跳过）："
+    echo "请输入其他绑定域名，多个用空格分隔（例如：www.nextlnmp.cn，直接回车跳过）："
     read -e moredomain
     if [ "${moredomain}" != "" ]; then
         echo " 绑定域名列表：${domain} ${moredomain}"
@@ -481,7 +481,7 @@ Add_VHost()
 
     vhostdir="/home/wwwroot/${domain}"
     echo ""
-    Echo_Yellow "请输入网站根目录（直接回车使用默认）："
+    echo "请输入网站根目录（直接回车使用默认）："
     echo "默认目录：${vhostdir}"
     read -e input_vhostdir
     if [ "${input_vhostdir}" != "" ]; then
@@ -500,7 +500,7 @@ Add_VHost()
     echo "7. Yii2"
     echo "8. ZBlog"
     echo "9. 不需要伪静态"
-    Echo_Yellow "请输入数字（直接回车默认选 1 WordPress）："
+    echo "请输入数字（直接回车默认选 1 WordPress）："
     read -e rewrite_select
     case "${rewrite_select}" in
         2) rewrite="typecho" ;;
@@ -516,7 +516,7 @@ Add_VHost()
     echo "已选择伪静态规则：${rewrite}"
 
     echo ""
-    Echo_Yellow "是否启用 PHP Pathinfo？（一般不需要，直接回车关闭）[y/N] "
+    echo "是否启用 PHP Pathinfo？（一般不需要，直接回车关闭）[y/N] "
     read -e enable_pathinfo
     if [[ "${enable_pathinfo}" == "y" || "${enable_pathinfo}" == "Y" ]]; then
         echo "已启用 Pathinfo。"
@@ -527,7 +527,7 @@ Add_VHost()
     fi
 
     echo ""
-    Echo_Yellow "是否记录访问日志？（会占用磁盘空间，直接回车关闭）[y/N] "
+    echo "是否记录访问日志？（会占用磁盘空间，直接回车关闭）[y/N] "
     read -e access_log
     if [[ "${access_log}" == "y" || "${access_log}" == "Y" ]]; then
         al_name="${domain}"
@@ -541,7 +541,7 @@ Add_VHost()
     fi
 
     echo ""
-    Echo_Yellow "是否启用 IPv6？（不了解请直接回车关闭）[y/N] "
+    echo "是否启用 IPv6？（不了解请直接回车关闭）[y/N] "
     read -e enable_ipv6
     if [[ "${enable_ipv6}" == "y" || "${enable_ipv6}" == "Y" ]]; then
         echo "已启用 IPv6。"
@@ -554,10 +554,13 @@ Add_VHost()
     Multiple_PHP_Select
 
     if [[ -s /usr/local/mysql/bin/mysql || -s /usr/local/mariadb/bin/mysql ]]; then
-        Echo_Yellow "Create database and MySQL user with same name (y/n) "
-        read create_database
-
-        if [ "${create_database}" == "y" ]; then
+        echo ""
+        echo "是否自动创建数据库和数据库用户？（推荐创建，直接回车默认创建）[Y/n] "
+        read -e create_database
+        if [[ "${create_database}" == "n" || "${create_database}" == "N" ]]; then
+            create_database="n"
+        else
+            create_database="y"
             Verify_DB_Password
             Add_Database_Menu
         fi
@@ -572,10 +575,14 @@ Add_VHost()
         fi
     fi
 
-    Echo_Yellow "Add SSL Certificate (y/n) "
-    read create_ssl
-    if [ "${create_ssl}" == "y" ]; then
+    echo ""
+    echo "是否申请 SSL 证书？（域名已解析完成选 y，未解析选 n，之后可用 nextlnmp ssl add 补申请）[y/N] "
+    read -e create_ssl
+    if [[ "${create_ssl}" == "y" || "${create_ssl}" == "Y" ]]; then
+        create_ssl="y"
         Add_SSL_Menu
+    else
+        create_ssl="n"
     fi
 
     echo ""
@@ -594,6 +601,11 @@ Add_VHost()
     chmod -R 755 ${vhostdir}
     chown -R www:www ${vhostdir}
 
+    # 解除可能残留的 chattr 不可变属性
+    if [ -f "${vhostdir}/.user.ini" ]; then
+        chattr -i "${vhostdir}/.user.ini" 2>/dev/null
+        rm -f "${vhostdir}/.user.ini"
+    fi
     Add_VHost_Config
 
     cat >${vhostdir}/.user.ini<<EOF
