@@ -2,7 +2,7 @@
 
 <div align="center">
 
-![Version](https://img.shields.io/badge/version-1.5.5-blue.svg)
+![Version](https://img.shields.io/badge/version-1.5.6-blue.svg)
 ![License](https://img.shields.io/badge/license-GPL--3.0-green.svg)
 ![System](https://img.shields.io/badge/system-CentOS%20|%20Ubuntu%20|%20Debian-orange.svg)
 ![PHP](https://img.shields.io/badge/PHP-5.6~8.4-purple.svg)
@@ -89,13 +89,13 @@ bash <(curl -sL https://gitee.com/palmmedia/nextlnmp/raw/main/install.sh)
 **方式二：从 Gitee 下载安装（国内快）**
 
 ```bash
-wget https://gitee.com/palmmedia/nextlnmp/releases/download/v1.5.5/nextlnmp-1.5.5.tar.gz && tar zxf nextlnmp-1.5.5.tar.gz && cd nextlnmp-1.5.5 && bash install.sh
+wget https://gitee.com/palmmedia/nextlnmp/releases/download/v1.5.6/nextlnmp-1.5.6.tar.gz && tar zxf nextlnmp-1.5.6.tar.gz && cd nextlnmp-1.5.6 && bash install.sh
 ```
 
 **方式三：从 GitHub 下载安装**
 
 ```bash
-wget https://github.com/NextLNMP/nextlnmp/releases/download/v1.5.5/nextlnmp-1.5.5.tar.gz && tar zxf nextlnmp-1.5.5.tar.gz && cd nextlnmp-1.5.5 && bash install.sh
+wget https://github.com/NextLNMP/nextlnmp/releases/download/v1.5.6/nextlnmp-1.5.6.tar.gz && tar zxf nextlnmp-1.5.6.tar.gz && cd nextlnmp-1.5.6 && bash install.sh
 ```
 
 三种方式装出来的东西完全一样，选哪个都行。
@@ -279,7 +279,7 @@ NextLNMP 的安全不是一句口号，是工程化落地的完整方案：
 ## 📂 目录结构
 
 ```
-nextlnmp-1.5.5/
+nextlnmp-1.5.6/
 ├── install.sh          # 安装入口
 ├── nextlnmp.conf       # 配置文件（镜像源地址等）
 ├── upgrade.sh          # 升级脚本
@@ -359,6 +359,15 @@ NextLNMP 采用 GPL-3.0 + 商业双授权模式：
 </details>
 
 ## 🔄 更新日志
+
+### v1.5.6 (2026-02-25)
+## v1.5.6（2025-02-25）
+
+### Bug 修复
+- 修复 vhost del 删除站点后未 reload nginx 的问题
+- 修复 Binary 安装缺少 init.d/php-fpm 启动脚本
+- 修复 Binary 安装从 GitHub 下载 php.ini 国内不可达，改为镜像站 + 内置兜底
+
 
 ### v1.5.5 (2026-02-25)
 - 🐛 修复 `nextlnmp info` / `nextlnmp password` 命令无效（case 分支在 `*` 通配符之后，永远执行不到）
