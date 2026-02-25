@@ -717,6 +717,8 @@ Del_VHost()
             rm -f "${vhostdir}/.user.ini"
         fi
         rm -f /usr/local/nginx/conf/vhost/${domain}.conf
+        echo "Reload Nginx..."
+        /usr/local/nginx/sbin/nginx -s reload
         echo "========================================================"
         echo "✓ 虚拟主机 ${domain} 已删除"
         echo "  网站文件未删除（安全起见），如需删除请手动执行："

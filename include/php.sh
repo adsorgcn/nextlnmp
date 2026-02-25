@@ -1219,7 +1219,56 @@ Install_PHP_82()
         fi
         Ln_PHP_Bin
         mkdir -p /usr/local/php/{etc,conf.d}
-        curl -sL https://raw.githubusercontent.com/php/php-src/PHP-8.2/php.ini-production -o /usr/local/php/etc/php.ini
+        # 优先从镜像站下载 php.ini，GitHub 国内不可达
+        if ! wget -q --timeout=15 -O /usr/local/php/etc/php.ini https://mirror.zhangmei.com/php/php.ini-production-8.2 2>/dev/null; then
+            # 兜底：用内置模板生成基础配置
+            Echo_Blue "镜像站下载失败，使用内置 php.ini 模板..."
+            cat >/usr/local/php/etc/php.ini<<'PHPINIEOF'
+[PHP]
+engine = On
+short_open_tag = On
+precision = 14
+output_buffering = 4096
+zlib.output_compression = Off
+implicit_flush = Off
+serialize_precision = -1
+zend.enable_gc = On
+expose_php = Off
+max_execution_time = 300
+max_input_time = 60
+memory_limit = 128M
+error_reporting = E_ALL & ~E_DEPRECATED & ~E_STRICT
+display_errors = Off
+log_errors = On
+error_log = /usr/local/php/var/log/php_errors.log
+post_max_size = 50M
+default_mimetype = "text/html"
+default_charset = "UTF-8"
+file_uploads = On
+upload_max_filesize = 50M
+max_file_uploads = 20
+allow_url_fopen = On
+allow_url_include = Off
+date.timezone = PRC
+cgi.fix_pathinfo=0
+disable_functions = passthru,exec,system,chroot,chgrp,chown,shell_exec,proc_open,proc_get_status,popen,ini_alter,ini_restore,dl,openlog,syslog,readlink,symlink,popepassthru,stream_socket_server
+[Session]
+session.save_handler = files
+session.save_path = "/tmp"
+session.use_strict_mode = 0
+session.use_cookies = 1
+session.use_only_cookies = 1
+session.name = PHPSESSID
+session.auto_start = 0
+session.gc_maxlifetime = 1440
+[opcache]
+opcache.enable=1
+opcache.memory_consumption=128
+opcache.max_accelerated_files=10000
+opcache.validate_timestamps=1
+opcache.revalidate_freq=60
+PHPINIEOF
+        fi
         cp /usr/local/php/etc/php-fpm.d/www.conf.default /usr/local/php/etc/php-fpm.d/www.conf
     else
         Install_Libzip
