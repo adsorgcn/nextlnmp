@@ -2,7 +2,7 @@
 
 <div align="center">
 
-![Version](https://img.shields.io/badge/version-1.5.2-blue.svg)
+![Version](https://img.shields.io/badge/version-1.5.3-blue.svg)
 ![License](https://img.shields.io/badge/license-GPL--3.0-green.svg)
 ![System](https://img.shields.io/badge/system-CentOS%20|%20Ubuntu%20|%20Debian-orange.svg)
 ![PHP](https://img.shields.io/badge/PHP-5.6~8.4-purple.svg)
@@ -89,13 +89,13 @@ bash <(curl -sL https://gitee.com/palmmedia/nextlnmp/raw/main/install.sh)
 **方式二：从 Gitee 下载安装（国内快）**
 
 ```bash
-wget https://gitee.com/palmmedia/nextlnmp/releases/download/v1.5.2/nextlnmp-1.5.2.tar.gz && tar zxf nextlnmp-1.5.2.tar.gz && cd nextlnmp-1.5.2 && bash install.sh
+wget https://gitee.com/palmmedia/nextlnmp/releases/download/v1.5.3/nextlnmp-1.5.3.tar.gz && tar zxf nextlnmp-1.5.3.tar.gz && cd nextlnmp-1.5.3 && bash install.sh
 ```
 
 **方式三：从 GitHub 下载安装**
 
 ```bash
-wget https://github.com/NextLNMP/nextlnmp/releases/download/v1.5.2/nextlnmp-1.5.2.tar.gz && tar zxf nextlnmp-1.5.2.tar.gz && cd nextlnmp-1.5.2 && bash install.sh
+wget https://github.com/NextLNMP/nextlnmp/releases/download/v1.5.3/nextlnmp-1.5.3.tar.gz && tar zxf nextlnmp-1.5.3.tar.gz && cd nextlnmp-1.5.3 && bash install.sh
 ```
 
 三种方式装出来的东西完全一样，选哪个都行。
@@ -279,7 +279,7 @@ NextLNMP 的安全不是一句口号，是工程化落地的完整方案：
 ## 📂 目录结构
 
 ```
-nextlnmp-1.5.2/
+nextlnmp-1.5.3/
 ├── install.sh          # 安装入口
 ├── nextlnmp.conf       # 配置文件（镜像源地址等）
 ├── upgrade.sh          # 升级脚本
@@ -359,6 +359,13 @@ NextLNMP 采用 GPL-3.0 + 商业双授权模式：
 </details>
 
 ## 🔄 更新日志
+
+### v1.5.3 (2026-02-25)
+- 🐛 修复安装完成界面 Unicode 边框字符在部分终端显示为乱码，改用 ASCII 字符
+- 🔧 重写 uninstall.sh，修复 Echo_Red/Press_Start/Check_Stack 未定义函数报错
+- ✨ uninstall.sh 新增「恢复出厂」选项，彻底清空服务器还原初始状态
+- 🔧 uninstall.sh banner 改为动态读取版本号，URL 改为 nextlnmp.cn
+
 
 ### v1.5.2 (2026-02-25)
 - 🐛 修复 CI 打包顺序，先回写版本号再打 tarball，解决 banner 显示旧版本号问题
