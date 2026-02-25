@@ -154,15 +154,15 @@ check_os() {
 print_logo() {
     clear
     echo ""
-    echo "  ╔═══════════════════════════════════════════════╗"
-    echo "  ║         NextLNMP 一键建站安装程序              ║"
-    echo "  ║         安全可信 · SHA256逐包校验              ║"
-    echo "  ╠═══════════════════════════════════════════════╣"
-    echo "  ║  版本：v${NEXTLNMP_VER}                                 ║"
-    echo "  ║  官网：https://cnwebmasters.com               ║"
-    echo "  ║  QQ群：615298                                 ║"
-    echo "  ║  作者：静水流深 · 掌媒科技有限公司               ║"
-    echo "  ╚═══════════════════════════════════════════════╝"
+    echo "  +===============================================+"
+    echo "  |         NextLNMP 一键建站安装程序              |"
+    echo "  |         安全可信 · SHA256逐包校验              |"
+    echo "  +===============================================+"
+    echo "  |  版本：v${NEXTLNMP_VER}                                 |"
+    echo "  |  官网：https://cnwebmasters.com               |"
+    echo "  |  QQ群：615298                                 |"
+    echo "  |  作者：静水流深 · 掌媒科技有限公司               |"
+    echo "  +===============================================+"
     echo ""
 }
 
@@ -387,18 +387,18 @@ bbr_setup() {
 
     if [[ $upgrade_ok -eq 1 ]]; then
         echo ""
-        echo -e "${GREEN}╔═══════════════════════════════════════════════════╗${PLAIN}"
-        echo -e "${GREEN}║          ✓ 内核升级完成！                        ║${PLAIN}"
-        echo -e "${GREEN}╠═══════════════════════════════════════════════════╣${PLAIN}"
-        echo -e "${GREEN}║  需要重启服务器才能使用新内核                    ║${PLAIN}"
-        echo -e "${GREEN}║                                                   ║${PLAIN}"
-        echo -e "${GREEN}║  👉 请执行以下命令重启：                         ║${PLAIN}"
-        echo -e "${GREEN}║                                                   ║${PLAIN}"
-        echo -e "${GREEN}║     reboot                                        ║${PLAIN}"
-        echo -e "${GREEN}║                                                   ║${PLAIN}"
-        echo -e "${GREEN}║  重启完成后：                                    ║${PLAIN}"
-        echo -e "${GREEN}║  按 ↑ 方向键找到上一条安装命令，回车继续安装    ║${PLAIN}"
-        echo -e "${GREEN}╚═══════════════════════════════════════════════════╝${PLAIN}"
+        echo -e "${GREEN}+===================================================+${PLAIN}"
+        echo -e "${GREEN}|          ✓ 内核升级完成！                        |${PLAIN}"
+        echo -e "${GREEN}+===================================================+${PLAIN}"
+        echo -e "${GREEN}|  需要重启服务器才能使用新内核                    |${PLAIN}"
+        echo -e "${GREEN}|                                                   |${PLAIN}"
+        echo -e "${GREEN}|  👉 请执行以下命令重启：                         |${PLAIN}"
+        echo -e "${GREEN}|                                                   |${PLAIN}"
+        echo -e "${GREEN}|     reboot                                        |${PLAIN}"
+        echo -e "${GREEN}|                                                   |${PLAIN}"
+        echo -e "${GREEN}|  重启完成后：                                    |${PLAIN}"
+        echo -e "${GREEN}|  按 ↑ 方向键找到上一条安装命令，回车继续安装    |${PLAIN}"
+        echo -e "${GREEN}+===================================================+${PLAIN}"
         echo ""
         exit 0
     else
@@ -537,12 +537,12 @@ extract_and_run() {
     chmod +x "${main_script}"
 
     echo ""
-    echo "═══════════════════════════════════════════"
+    echo "==========================================="
     echo "  ✓ 一切就绪，即将启动安装向导"
     echo ""
     echo "  安装目录：${INSTALL_DIR}"
     echo "  技术支持：QQ群 615298"
-    echo "═══════════════════════════════════════════"
+    echo "==========================================="
     echo ""
 
     sleep 2

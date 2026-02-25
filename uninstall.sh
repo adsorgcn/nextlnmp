@@ -1,250 +1,116 @@
 #!/usr/bin/env bash
 export PATH=$PATH:/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:~/bin
 
-# Check if user is root
 if [ $(id -u) != "0" ]; then
-    echo "Error: You must be root to run this script, please use root to install nextlnmp"
+    echo "错误：请使用 root 用户运行此脚本"
     exit 1
 fi
 
 cur_dir=$(pwd)
-Stack=$1
+. ${cur_dir}/nextlnmp.conf
+. ${cur_dir}/include/main.sh
 
-NEXTLNMP_Ver='1.0.0'
-
-. nextlnmp.conf
-. include/main.sh
-
-shopt -s extglob
-
-Check_DB
 Get_Dist_Name
 
 clear
-echo "+------------------------------------------------------------------------+"
-echo "|          nextLNMP V${NEXTLNMP_Ver} for ${DISTRO} Linux Server, by nextLNMP team     |"
-echo "+------------------------------------------------------------------------+"
-echo "|        A tool to auto-compile & install Nginx+MySQL+PHP on Linux       |"
-echo "+------------------------------------------------------------------------+"
-echo "|           For more information please visit https://nextlnmp.com           |"
-echo "+------------------------------------------------------------------------+"
+echo "+----------------------------------------------------------+"
+echo "|         NextLNMP v${NEXTLNMP_Ver} 卸载程序                       |"
+echo "|         官网：https://nextlnmp.cn                       |"
+echo "+----------------------------------------------------------+"
+echo ""
+echo "请选择操作："
+echo "  1. 卸载 NextLNMP（保留网站数据和数据库备份）"
+echo "  2. 恢复出厂（删除所有数据，彻底清空）"
+echo ""
+read -p "请输入选项 [1/2]：" action
 
-Sleep_Sec()
-{
-    seconds=$1
-    while [ "${seconds}" -ge "0" ];do
-      echo -ne "\r     \r"
-      echo -n ${seconds}
-      seconds=$(($seconds - 1))
-      sleep 1
+case "$action" in
+1)
+    echo ""
+    Echo_Yellow "即将卸载 NextLNMP，以下目录将被删除："
+    echo "  /usr/local/nginx"
+    echo "  /usr/local/php"
+    echo "  /usr/local/mysql（数据库将备份到 /root/）"
+    echo "  /etc/init.d/nginx、php-fpm"
+    echo "  /bin/nextlnmp"
+    echo ""
+    read -p "确认卸载？[y/N]：" confirm
+    [[ "$confirm" != "y" && "$confirm" != "Y" ]] && echo "已取消" && exit 0
+
+    echo "正在停止服务..."
+    for svc in nginx mysql mysqld mariadb; do
+        [ -f /etc/init.d/$svc ] && /etc/init.d/$svc stop 2>/dev/null
     done
-    echo -ne "\r"
-}
-
-Uninstall_nextLNMP()
-{
-    echo "Stoping nextLNMP..."
-    nextlnmp kill
-    nextlnmp stop
-
-    Remove_StartUp nginx
-    Remove_StartUp php-fpm
-    if [ ${DB_Name} != "None" ]; then
-        Remove_StartUp ${DB_Name}
-        echo "Backup ${DB_Name} databases directory to /root/databases_backup_$(date +"%Y%m%d%H%M%S")"
-        if [ ${DB_Name} == "mysql" ]; then
-            mv ${MySQL_Data_Dir} /root/databases_backup_$(date +"%Y%m%d%H%M%S")
-        elif [ ${DB_Name} == "mariadb" ]; then
-            mv ${MariaDB_Data_Dir} /root/databases_backup_$(date +"%Y%m%d%H%M%S")
-        fi
-    fi
-    chattr -i ${Default_Website_Dir}/.user.ini
-    echo "Deleting nextLNMP files..."
-    rm -rf /usr/local/nginx
-    rm -rf /usr/local/php
-    rm -rf /usr/local/zend
-
-    if [ ${DB_Name} != "None" ]; then
-        rm -rf /usr/local/${DB_Name}
-        rm -f /etc/my.cnf
-        rm -f /etc/init.d/${DB_Name}
-    fi
-
-    for mphp in /usr/local/php[5,7].[0-9]; do
-        mphp_ver=`echo $mphp|sed 's#/usr/local/php##'`
-        if [ -s /etc/init.d/php-fpm${mphp_ver} ]; then
-            /etc/init.d/php-fpm${mphp_ver} stop
-            Remove_StartUp php-fpm${mphp_ver}
-            rm -f /etc/init.d/php-fpm${mphp_ver}
-        fi
-        if [ -d ${mphp} ]; then
-            rm -rf ${mphp}
-        fi
+    for phpfpm in /etc/init.d/php-fpm /etc/init.d/php-fpm[5,7,8].[0-9]; do
+        [ -f "$phpfpm" ] && $phpfpm stop 2>/dev/null
     done
+    pkill -f nginx 2>/dev/null
+    pkill -f php-fpm 2>/dev/null
+    pkill -f mysqld 2>/dev/null
 
-    if [ -s /usr/local/acme.sh/acme.sh ]; then
-        /usr/local/acme.sh/acme.sh --uninstall
-        rm -rf /usr/local/acme.sh
-        if crontab -l|grep -v "/usr/local/acme.sh/upgrade.sh"; then
-            crontab -l|grep -v "/usr/local/acme.sh/upgrade.sh" | crontab -
-        fi
-    fi
-
-    rm -f /etc/init.d/nginx
-    rm -f /etc/init.d/php-fpm
-    rm -f /bin/nextlnmp
-    echo "nextLNMP Uninstall completed."
-}
-
-Uninstall_nextLNMPA()
-{
-    echo "Stoping nextLNMPA..."
-    nextlnmp kill
-    nextlnmp stop
-    
-    Remove_StartUp nginx
-    Remove_StartUp httpd
-    if [ ${DB_Name} != "None" ]; then
-        Remove_StartUp ${DB_Name}
-        echo "Backup ${DB_Name} databases directory to /root/databases_backup_$(date +"%Y%m%d%H%M%S")"
-        if [ ${DB_Name} == "mysql" ]; then
-            mv ${MySQL_Data_Dir} /root/databases_backup_$(date +"%Y%m%d%H%M%S")
-        elif [ ${DB_Name} == "mariadb" ]; then
-            mv ${MariaDB_Data_Dir} /root/databases_backup_$(date +"%Y%m%d%H%M%S")
-        fi
-    fi
-    echo "Deleting nextLNMPA files..."
-    rm -rf /usr/local/nginx
-    rm -rf /usr/local/php
-    rm -rf /usr/local/apache
-    rm -rf /usr/local/zend
-
-    if [ ${DB_Name} != "None" ]; then
-        rm -rf /usr/local/${DB_Name}
-        rm -f /etc/my.cnf
-        rm -f /etc/init.d/${DB_Name}
+    if [ -n "${MySQL_Data_Dir}" ] && [ -d "${MySQL_Data_Dir}" ]; then
+        backup_dir="/root/databases_backup_$(date +%Y%m%d%H%M%S)"
+        echo "备份数据库到 ${backup_dir}..."
+        mv ${MySQL_Data_Dir} ${backup_dir}
     fi
 
     if [ -s /usr/local/acme.sh/acme.sh ]; then
-        /usr/local/acme.sh/acme.sh --uninstall
+        /usr/local/acme.sh/acme.sh --uninstall 2>/dev/null
         rm -rf /usr/local/acme.sh
-        if crontab -l|grep -v "/usr/local/acme.sh/upgrade.sh"; then
-            crontab -l|grep -v "/usr/local/acme.sh/upgrade.sh" | crontab -
-        fi
     fi
 
-    rm -f /etc/init.d/nginx
-    rm -f /etc/init.d/httpd
-    rm -f /bin/nextlnmp
-    echo "nextLNMPA Uninstall completed."
-}
+    echo "删除 NextLNMP 文件..."
+    rm -rf /usr/local/nginx /usr/local/php /usr/local/mysql /usr/local/mariadb /usr/local/zend
+    rm -f /etc/my.cnf /etc/init.d/nginx /etc/init.d/mysql /etc/init.d/mysqld /etc/init.d/mariadb
+    for phpfpm in /etc/init.d/php-fpm /etc/init.d/php-fpm[5,7,8].[0-9]; do
+        rm -f "$phpfpm" 2>/dev/null
+    done
+    rm -f /bin/nextlnmp /usr/bin/nextlnmp
+    rm -rf /root/nextlnmp
 
-Uninstall_LAMP()
-{
-    echo "Stoping NextLAMP..."
-    nextlnmp kill
-    nextlnmp stop
+    Echo_Green "NextLNMP 卸载完成！网站文件和数据库备份保留在 /home/wwwroot 和 /root/"
+    ;;
+2)
+    echo ""
+    Echo_Yellow "⚠️  警告：恢复出厂将删除所有数据，包括网站文件和数据库，不可恢复！"
+    echo ""
+    read -p "请输入 YES 确认彻底清空：" confirm
+    [[ "$confirm" != "YES" ]] && echo "已取消" && exit 0
 
-    Remove_StartUp httpd
-    if [ ${DB_Name} != "None" ]; then
-        Remove_StartUp ${DB_Name}
-        echo "Backup ${DB_Name} databases directory to /root/databases_backup_$(date +"%Y%m%d%H%M%S")"
-        if [ ${DB_Name} == "mysql" ]; then
-            mv ${MySQL_Data_Dir} /root/databases_backup_$(date +"%Y%m%d%H%M%S")
-        elif [ ${DB_Name} == "mariadb" ]; then
-            mv ${MariaDB_Data_Dir} /root/databases_backup_$(date +"%Y%m%d%H%M%S")
-        fi
-    fi
-    echo "Deleting NextLAMP files..."
-    rm -rf /usr/local/apache
-    rm -rf /usr/local/php
-    rm -rf /usr/local/zend
-
-    if [ ${DB_Name} != "None" ]; then
-        rm -rf /usr/local/${DB_Name}
-        rm -f /etc/my.cnf
-        rm -f /etc/init.d/${DB_Name}
-    fi
+    echo "正在停止服务..."
+    for svc in nginx mysql mysqld mariadb; do
+        [ -f /etc/init.d/$svc ] && /etc/init.d/$svc stop 2>/dev/null
+    done
+    for phpfpm in /etc/init.d/php-fpm /etc/init.d/php-fpm[5,7,8].[0-9]; do
+        [ -f "$phpfpm" ] && $phpfpm stop 2>/dev/null
+    done
+    pkill -f nginx 2>/dev/null
+    pkill -f php-fpm 2>/dev/null
+    pkill -f mysqld 2>/dev/null
 
     if [ -s /usr/local/acme.sh/acme.sh ]; then
-        /usr/local/acme.sh/acme.sh --uninstall
+        /usr/local/acme.sh/acme.sh --uninstall 2>/dev/null
         rm -rf /usr/local/acme.sh
-        if crontab -l|grep -v "/usr/local/acme.sh/upgrade.sh"; then
-            crontab -l|grep -v "/usr/local/acme.sh/upgrade.sh" | crontab -
-        fi
     fi
 
-    rm -f /etc/my.cnf
-    rm -f /etc/init.d/httpd
-    rm -f /bin/nextlnmp
-    echo "NextLAMP Uninstall completed."
-}
+    echo "删除所有文件..."
+    rm -rf /usr/local/nginx /usr/local/php /usr/local/mysql /usr/local/mariadb /usr/local/zend
+    rm -rf /home/wwwroot
+    rm -f /etc/my.cnf /etc/init.d/nginx /etc/init.d/mysql /etc/init.d/mysqld /etc/init.d/mariadb
+    for phpfpm in /etc/init.d/php-fpm /etc/init.d/php-fpm[5,7,8].[0-9]; do
+        rm -f "$phpfpm" 2>/dev/null
+    done
+    rm -f /bin/nextlnmp /usr/bin/nextlnmp
+    rm -f /root/nextlnmp-info.txt
+    rm -rf /root/nextlnmp
 
-    Check_Stack
-    echo "Current Stack: ${Get_Stack}"
-
-    action=""
-    echo "Enter 1 to uninstall nextLNMP"
-    echo "Enter 2 to uninstall nextLNMPA"
-    echo "Enter 3 to uninstall NextLAMP"
-    read -p "(Please input 1, 2 or 3): " action
-
-    case "$action" in
-    1|[lL][nN][nM][pP])
-        echo "You will uninstall nextLNMP"
-        Echo_Red "Please backup your configure files and mysql data!!!!!!"
-        Echo_Red "The following directory or files will be remove!"
-        cat << EOF
-/usr/local/nginx
-${MySQL_Dir}
-/usr/local/php
-/etc/init.d/nginx
-/etc/init.d/${DB_Name}
-/etc/init.d/php-fpm
-/usr/local/zend
-/etc/my.cnf
-/bin/nextlnmp
-EOF
-        Sleep_Sec 3
-        Press_Start
-        Uninstall_nextLNMP
+    apt-get remove -y nginx mysql-server mysql-client php* 2>/dev/null
+    apt-get autoremove -y 2>/dev/null
+    apt-get autoclean 2>/dev/null
+    Echo_Green "恢复出厂完成，服务器已恢复至初始状态。"
     ;;
-    2|[lL][nN][nM][pP][aA])
-        echo "You will uninstall nextLNMPA"
-        Echo_Red "Please backup your configure files and mysql data!!!!!!"
-        Echo_Red "The following directory or files will be remove!"
-        cat << EOF
-/usr/local/nginx
-${MySQL_Dir}
-/usr/local/php
-/usr/local/apache
-/etc/init.d/nginx
-/etc/init.d/${DB_Name}
-/etc/init.d/httpd
-/usr/local/zend
-/etc/my.cnf
-/bin/nextlnmp
-EOF
-        Sleep_Sec 3
-        Press_Start
-        Uninstall_nextLNMPA
+*)
+    echo "无效选项，已退出"
+    exit 1
     ;;
-    3|[lL][aA][nM][pP])
-        echo "You will uninstall NextLAMP"
-        Echo_Red "Please backup your configure files and mysql data!!!!!!"
-        Echo_Red "The following directory or files will be remove!"
-        cat << EOF
-/usr/local/apache
-${MySQL_Dir}
-/etc/init.d/httpd
-/etc/init.d/${DB_Name}
-/usr/local/php
-/usr/local/zend
-/etc/my.cnf
-/bin/nextlnmp
-EOF
-        Sleep_Sec 3
-        Press_Start
-        Uninstall_LAMP
-    ;;
-    esac
+esac

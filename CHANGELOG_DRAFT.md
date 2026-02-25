@@ -1,0 +1,4 @@
+- 🐛 修复安装完成界面 Unicode 边框字符在部分终端显示为乱码，改用 ASCII 字符
+- 🔧 重写 uninstall.sh，修复 Echo_Red/Press_Start/Check_Stack 未定义函数报错
+- ✨ uninstall.sh 新增「恢复出厂」选项，彻底清空服务器还原初始状态
+- 🔧 uninstall.sh banner 改为动态读取版本号，URL 改为 nextlnmp.cn
